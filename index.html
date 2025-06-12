@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Controle de Estoque GOINFRA</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <style>
+        body {
+            padding-top: 100px;
+            background-color: #306aa4;
+        }
+
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: white;
+            z-index: 1000;
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .card-user {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 15px;
+            background: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-remove-software {
+            color: red;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        .estoque-toggle {
+            cursor: pointer;
+        }
+
+        .icon-disponivel {
+            color: green;
+        }
+
+        .icon-indisponivel {
+            color: gray;
+        }
+
+        .usuarios-scroll {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .dispositivo-header {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 10px;
+            background: #fff;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid #dee2e6;
+        }
+
+        .dispositivo-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            min-width: 180px;
+        }
+
+        .dispositivo-info {
+            display: flex;
+            flex-direction: column;
+            margin-left: 8px;
+        }
+
+        .dispositivo-tipo {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .dispositivo-totais {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .disponivel {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .indisponivel {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .total {
+            color: #6c757d;
+            font-weight: bold;
+        }
+
+        .separador {
+            margin: 0 4px;
+            color: #adb5bd;
+        }
+
+        .nav-tabs {
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="fixed-header">
+        <h5>STCP ENGENHARIA</h5>
+        <h3>CONTROLE DE ESTOQUE GOINFRA</h3>
+    </div>
+
+    <div id="app" class="container">
+        <div class="dispositivo-header">
+            <div v-for="(item, i) in totaisDispositivos" :key="i" class="dispositivo-item">
+                <i :class="[item.icone, 'mr-2']"></i>
+                <div class="dispositivo-info">
+                    <span class="dispositivo-tipo">{{ item.tipo }}</span>
+                    <div class="dispositivo-totais">
+                        <span class="disponivel">{{ item.disponiveis }}D</span>
+                        <span class="separador">/</span>
+                        <span class="indisponivel">{{ item.indisponiveis }}I</span>
+                        <span class="separador">|</span>
+                        <span class="total">{{ item.total }}T</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs mb-4">
+            <li class="nav-item"><a class="nav-link" :class="{active: abaAtiva==='atribuicao'}" href="#"
+                    @click.prevent="abaAtiva='atribuicao'">Atribuição</a></li>
+            <li class="nav-item"><a class="nav-link" :class="{active: abaAtiva==='estoque'}" href="#"
+                    @click.prevent="abaAtiva='estoque'">Estoque</a></li>
+            <li class="nav-item"><a class="nav-link" :class="{active: abaAtiva==='usuarios'}" href="#"
+                    @click.prevent="abaAtiva='usuarios'">Usuários</a></li>
+            <li class="nav-item"><a class="nav-link" :class="{active: abaAtiva==='relatorio'}" href="#"
+                    @click.prevent="abaAtiva='relatorio'">Relatório</a></li>
+        </ul>
+
+        <!-- Relatório -->
+        <div v-if="abaAtiva==='relatorio'" class="card mb-4">
+            <h5>Relatório Mensal</h5>
+            <div class="form-inline">
+                <select v-model="mesRelatorio" class="form-control mr-2">
+                    <option v-for="m in 12" :value="m">{{m}}</option>
+                </select>
+                <input type="number" v-model="anoRelatorio" class="form-control mr-2" placeholder="Ano" />
+                <button class="btn btn-primary" @click="gerarRelatorio()">Baixar CSV</button>
+            </div>
+        </div>
+
+        <!-- Atribuição -->
+        <div v-if="abaAtiva==='atribuicao'">
+            <h4>Atribuir Equipamentos</h4>
+            <form @submit.prevent="atribuirEquipamentos">
+                <div class="form-row">
+                    <div class="form-group col-md-3"><input type="text" class="form-control" v-model="novoUsuario"
+                            placeholder="Nome" required /></div>
+                    <div class="form-group col-md-3"><input type="email" class="form-control" v-model="novoEmail"
+                            placeholder="Email" /></div>
+                    <div class="form-group col-md-3"><input type="text" class="form-control" v-model="novaLocalizacao"
+                            placeholder="Localização" /></div>
+                </div>
+                <h5>Equipamentos Disponíveis</h5>
+                <div v-for="tipo in tiposEquipamentos" :key="tipo" class="mb-3">
+                    <div class="estoque-toggle font-weight-bold mb-2" @click="toggleEstoque(tipo)">
+                        <i :class="[iconeTipo(tipo),'mr-2']"></i> {{tipo}} - Disponíveis: {{contarDisponiveis(tipo)}} <i
+                            class="fas fa-chevron-down"></i>
+                    </div>
+                    <div v-if="estoqueVisivel[tipo]">
+                        <div class="form-check" v-for="equip in equipamentosDisponiveis.filter(e=>e.tipo===tipo)"
+                            :key="equip.patrimonio">
+                            <input class="form-check-input" type="checkbox" :value="equip.patrimonio"
+                                v-model="equipamentosSelecionados" />
+                            <label class="form-check-label">
+                                <i :class="[iconeTipo(equip.tipo),'mr-2','icon-disponivel']"></i>{{equip.tipo}} –
+                                {{equip.modelo}} ({{equip.patrimonio}})
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <h5 class="mt-4">Softwares</h5>
+                <div v-for="(soft,i) in softwaresSelecionados" :key="i" class="form-row mb-2 align-items-center">
+                    <div class="col-md-4">
+                        <select class="form-control" v-model="soft.nome">
+                            <option disabled value="">Selecione o software</option>
+                            <option>AutoCAD Collection</option>
+                            <option>GstarCAD</option>
+                            <option>CypeCAD</option>
+                            <option>AltoQi</option>
+                            <option>Outro</option>
+                        </select>
+                    </div>
+                    <div class="col-md-7"><input type="text" class="form-control" v-model="soft.chave"
+                            placeholder="Chave de acesso" /></div>
+                    <div class="col-md-1"><span class="btn-remove-software" @click="removerSoftware(i)"><i
+                                class="fas fa-minus-circle"></i></span></div>
+                </div>
+                <button class="btn btn-secondary btn-sm mb-3"
+                    @click.prevent="softwaresSelecionados.push({nome:'',chave:''})">Adicionar Software</button>
+                <button class="btn btn-primary mt-2" type="submit">Salvar Atribuição</button>
+            </form>
+        </div>
+
+        <!-- Estoque -->
+        <div v-if="abaAtiva==='estoque'">
+            <h4>Estoque</h4>
+            <div class="mb-3">
+                <h5>Adicionar Equipamento</h5>
+                <form @submit.prevent="adicionarEquipamento" class="form-inline">
+                    <select class="form-control mr-2" v-model="novoEquipamento.tipo" required>
+                        <option disabled value="">Tipo</option>
+                        <option>Monitor</option>
+                        <option>Notebook</option>
+                        <option>Tablet</option>
+                        <option>Desktop</option>
+                    </select>
+                    <input class="form-control mr-2" type="text" v-model="novoEquipamento.modelo" placeholder="Modelo"
+                        required />
+                    <input class="form-control mr-2" type="text" v-model="novoEquipamento.patrimonio"
+                        placeholder="Patrimônio" required />
+                    <button type="submit" class="btn btn-success">Adicionar</button>
+                </form>
+            </div>
+            <div v-for="tipo in tiposEquipamentos" :key="tipo">
+                <div class="estoque-toggle font-weight-bold mb-2" @click="toggleEstoque(tipo)">
+                    <i :class="[iconeTipo(tipo),'mr-2']"></i> {{tipo}} – Disponíveis: {{contarDisponiveis(tipo)}} /
+                    Total: {{equipamentos.filter(e=>e.tipo===tipo).length}} <i class="fas fa-chevron-down"></i>
+                </div>
+                <ul v-if="estoqueVisivel[tipo]" class="list-group mb-3">
+                    <li v-for="equip in equipamentos.filter(e=>e.tipo===tipo)" :key="equip.patrimonio"
+                        class="list-group-item d-flex justify-content-between align-items-center">
+                        <div><i
+                                :class="[iconeTipo(equip.tipo), equip.situacao==='Disponível'?'icon-disponivel':'icon-indisponivel','mr-2']"></i>{{equip.modelo}}
+                            ({{equip.patrimonio}}) – {{equip.situacao}}</div>
+                        <button class="btn btn-sm btn-danger" @click="removerEquipamento(equip.patrimonio)"><i
+                                class="fas fa-trash"></i></button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Usuários -->
+        <div v-if="abaAtiva==='usuarios'">
+            <h4>Usuários</h4>
+            <div v-if="atribuicoes.length===0">Nenhuma atribuição feita.</div>
+            <div class="usuarios-scroll">
+                <div v-for="(a,i) in atribuicoes" :key="i" class="card-user">
+                    <h5>{{a.usuario}}</h5>
+                    <p><strong>Email:</strong> {{a.email}}</p>
+                    <p><strong>Localização:</strong> {{a.localizacao}}</p>
+                    <p><strong>Equipamentos:</strong></p>
+                    <ul>
+                        <li v-for="e in a.equipamentos" :key="e.patrimonio">{{e.tipo}} – {{e.modelo}} ({{e.patrimonio}})
+                        </li>
+                    </ul>
+                    <p><strong>Softwares:</strong></p>
+                    <ul>
+                        <li v-for="s in a.softwares" :key="s.nome">{{s.nome}} – {{s.chave}}</li>
+                    </ul>
+                    <div class="mt-2">
+                        <button class="btn btn-info btn-sm mr-2" @click="gerarTermo(a)"><i
+                                class="fas fa-file-signature"></i> Gerar Termo</button>
+                        <button class="btn btn-warning btn-sm mr-2" @click="editarUsuario(i)"><i
+                                class="fas fa-edit"></i> Editar</button>
+                        <button class="btn btn-danger btn-sm" @click="excluirUsuario(i)"><i class="fas fa-trash"></i>
+                            Excluir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                abaAtiva: 'atribuicao',
+                novoUsuario: '', novoEmail: '', novaLocalizacao: '',
+                equipamentosSelecionados: [], softwaresSelecionados: [{ nome: '', chave: '' }],
+                estoqueVisivel: {}, novoEquipamento: { tipo: '', modelo: '', patrimonio: '' },
+                equipamentos: [], atribuicoes: [],
+                mesRelatorio: new Date().getMonth() + 1, anoRelatorio: new Date().getFullYear()
+            },
+            mounted() {
+                const s = localStorage.getItem('sistema');
+                if (s) { const st = JSON.parse(s); this.equipamentos = st.equipamentos; this.atribuicoes = st.atribuicoes }
+                else { this.equipamentos = [...Array(5)].map((_, i) => ({ tipo: 'Monitor', modelo: 'Samsung 24\"', patrimonio: `M-S24-${i + 1}`, situacao: 'Disponível' })), [...Array(5)].map((_, i) => ({ tipo: 'Notebook', modelo: 'Lenovo i5', patrimonio: `N-L13-${i + 1}`, situacao: 'Disponível' })) }
+            },
+            watch: {
+                equipamentos: { handler: 'save', deep: true }, atribuicoes: { handler: 'save', deep: true }
+            },
+            computed: {
+                equipamentosDisponiveis() { return this.equipamentos.filter(e => e.situacao === 'Disponível') },
+                tiposEquipamentos() { return [...new Set(this.equipamentos.map(e => e.tipo))] },
+                totaisDispositivos() { return this.tiposEquipamentos.map(tipo => { const total = this.equipamentos.filter(e => e.tipo === tipo).length; const dispon = this.contarDisponiveis(tipo); return { tipo, icone: this.iconeTipo(tipo), total, disponiveis: dispon, indisponiveis: total - dispon } }) }
+            },
+            methods: {
+                save() { localStorage.setItem('sistema', JSON.stringify({ equipamentos: this.equipamentos, atribuicoes: this.atribuicoes })); },
+                toggleEstoque(tipo) { this.$set(this.estoqueVisivel, tipo, !this.estoqueVisivel[tipo]) },
+                iconeTipo(t) { if (t === 'Desktop') return 'fas fa-server'; if (t === 'Notebook') return 'fas fa-laptop'; if (t === 'Tablet') return 'fas fa-tablet-alt'; if (t === 'Monitor') return 'fas fa-tv'; return 'fas fa-box' },
+                contarDisponiveis(tipo) { return this.equipamentos.filter(e => e.tipo === tipo && e.situacao === 'Disponível').length },
+                removerSoftware(i) { this.softwaresSelecionados.splice(i, 1) },
+                atribuirEquipamentos() {
+                    if (!this.novoUsuario || !this.equipamentosSelecionados.length) { alert('Informe nome e selecione equipamento.'); return }
+                    const atrib = {
+                        usuario: this.novoUsuario, email: this.novoEmail, localizacao: this.novaLocalizacao,
+                        equipamentos: this.equipamentos.filter(e => this.equipamentosSelecionados.includes(e.patrimonio)),
+                        softwares: [...this.softwaresSelecionados], data: new Date().toISOString()
+                    };
+                    this.equipamentos = this.equipamentos.map(e => this.equipamentosSelecionados.includes(e.patrimonio) ? { ...e, situacao: 'Indisponível' } : e);
+                    this.atribuicoes.push(atrib);
+                    this.novoUsuario = this.novoEmail = this.novaLocalizacao = ''; this.equipamentosSelecionados = []; this.softwaresSelecionados = [{ nome: '', chave: '' }]; alert('Atribuição salva com sucesso.')
+                },
+                adicionarEquipamento() { this.equipamentos.push({ ...this.novoEquipamento, situacao: 'Disponível' }); this.novoEquipamento = { tipo: '', modelo: '', patrimonio: '' } },
+                removerEquipamento(p) { const i = this.equipamentos.findIndex(e => e.patrimonio === p); if (i >= 0) this.equipamentos.splice(i, 1) },
+                excluirUsuario(i) { if (confirm("Excluir essa atribuição?")) { const a = this.atribuicoes[i]; a.equipamentos.forEach(eq => { const e = this.equipamentos.find(x => x.patrimonio === eq.patrimonio); if (e) e.situacao = 'Disponível' }); this.atribuicoes.splice(i, 1) } },
+                editarUsuario(i) { const a = this.atribuicoes[i]; this.novoUsuario = a.usuario; this.novoEmail = a.email; this.novaLocalizacao = a.localizacao; this.equipamentosSelecionados = a.equipamentos.map(e => e.patrimonio); this.softwaresSelecionados = JSON.parse(JSON.stringify(a.softwares)); a.equipamentos.forEach(eq => { const e = this.equipamentos.find(x => x.patrimonio === eq.patrimonio); if (e) e.situacao = 'Disponível' }); this.atribuicoes.splice(i, 1); this.abaAtiva = 'atribuicao' },
+                gerarRelatorio() {
+                    const rows = this.atribuicoes.filter(a => { const d = new Date(a.data); return d.getMonth() + 1 === this.mesRelatorio && d.getFullYear() === this.anoRelatorio }).map(a => [a.data, a.usuario, a.email, a.localizacao, a.equipamentos.length, a.softwares.length]);
+                    const header = ['Data', 'Usuário', 'Email', 'Localização', '# Equip', 'Softwares'];
+                    const csv = [header, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\r\n');
+                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const fname = `relatorio-${this.anoRelatorio}-${String(this.mesRelatorio).padStart(2, '0')}.csv`;
+                    if (navigator.msSaveBlob) navigator.msSaveBlob(blob, fname); else { const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = fname; link.click(); URL.revokeObjectURL(link.href); }
+                },
+                gerarTermo(a) {
+                    const d = new Date(a.data).toLocaleDateString();
+                    const items = a.equipamentos.map(e => `- ${e.tipo} “${e.modelo}” — Patrimônio ${e.patrimonio}`).join('\n');
+                    const txt = `
+TERMO DE RESPONSABILIDADE
+
+Eu, ${a.usuario}, CPF nº ____________, lotado(a) em ${a.localizacao},
+declaro ter recebido da STCP ENGENHARIA os equipamentos abaixo relacionados em ${d}:
+
+${items}
+
+Comprometo‑me a:
+• Zelar pela integridade física e conservação dos equipamentos;
+• Não os emprestar ou transferi-los;
+• Comunicar imediatamente qualquer dano, extravio ou furto;
+• Devolvê‑los nas mesmas condições ao término do uso ou solicitação.
+
+Goiânia, ${d}.
+
+___________________________________  
+(Assinatura do responsável)
+`;
+                    const blob = new Blob([txt], { type: 'text/plain' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob);
+                    link.download = `termo_${a.usuario}_${d}.txt`; link.click(); URL.revokeObjectURL(link.href);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
