@@ -174,6 +174,20 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             z-index: 1001;
         }
+        
+        .modelo-card {
+            border-left: 4px solid #306aa4;
+        }
+        
+        .patrimonio-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .patrimonio-item {
+            padding: 5px 10px;
+            border-bottom: 1px solid #eee;
+        }
     </style>
 </head>
 
@@ -330,41 +344,107 @@
                     </form>
                 </div>
 
-                <!-- Estoque -->
+                <!-- Estoque - Versão Melhorada -->
                 <div v-if="abaAtiva==='estoque'">
                     <h4>Estoque</h4>
-                    <div v-if="isAdmin" class="mb-3">
-                        <h5>Adicionar Equipamento</h5>
-                        <form @submit.prevent="adicionarEquipamento" class="form-inline">
-                            <select class="form-control mr-2" v-model="novoEquipamento.tipo" required>
-                                <option disabled value="">Tipo</option>
-                                <option>Monitor</option>
-                                <option>Notebook</option>
-                                <option>Tablet</option>
-                                <option>Desktop</option>
-                            </select>
-                            <input class="form-control mr-2" type="text" v-model="novoEquipamento.modelo" placeholder="Modelo"
-                                required />
-                            <input class="form-control mr-2" type="text" v-model="novoEquipamento.patrimonio"
-                                placeholder="Patrimônio" required />
-                            <button type="submit" class="btn btn-success">Adicionar</button>
-                        </form>
+                    
+                    <!-- Cadastro de Modelos -->
+                    <div v-if="isAdmin" class="card mb-4 modelo-card">
+                        <div class="card-header bg-light">
+                            <h5>Cadastrar Novo Modelo</h5>
+                        </div>
+                        <div class="card-body">
+                            <form @submit.prevent="adicionarModelo" class="row g-3">
+                                <div class="col-md-4">
+                                    <label>Tipo</label>
+                                    <select class="form-control" v-model="novoModelo.tipo" required>
+                                        <option disabled value="">Selecione</option>
+                                        <option>Monitor</option>
+                                        <option>Notebook</option>
+                                        <option>Tablet</option>
+                                        <option>Desktop</option>
+                                        <option value="outro">Outro</option>
+                                    </select>
+                                    <input v-if="novoModelo.tipo === 'outro'" class="form-control mt-2" 
+                                           v-model="novoModelo.novoTipo" placeholder="Especificar tipo" required />
+                                </div>
+                                <div class="col-md-5">
+                                    <label>Modelo</label>
+                                    <input class="form-control" v-model="novoModelo.modelo" 
+                                           placeholder="Ex: Dell Optiplex 7080" required />
+                                </div>
+                                <div class="col-md-3 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-save"></i> Salvar Modelo
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
+
+                    <!-- Adição de Patrimônios -->
+                    <div v-if="isAdmin && modelosCadastrados.length > 0" class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5>Adicionar Patrimônios</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>Selecione o Modelo</label>
+                                    <select class="form-control" v-model="modeloSelecionado" required>
+                                        <option disabled value="">Selecione um modelo</option>
+                                        <option v-for="(modelo, index) in modelosCadastrados" :value="index">
+                                            {{ modelo.tipo }} - {{ modelo.modelo }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label>Patrimônios (um por linha)</label>
+                                    <textarea class="form-control" v-model="patrimoniosParaAdicionar" 
+                                              rows="5" placeholder="Digite os números de patrimônio, um em cada linha" required></textarea>
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button class="btn btn-success w-100" @click="adicionarPatrimonios">
+                                        <i class="fas fa-plus-circle"></i> Adicionar Patrimônios
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Equipamentos -->
                     <div v-for="tipo in tiposEquipamentos" :key="tipo">
                         <div class="estoque-toggle font-weight-bold mb-2" @click="toggleEstoque(tipo)">
                             <i :class="[iconeTipo(tipo),'mr-2']"></i> {{tipo}} – Disponíveis: {{contarDisponiveis(tipo)}} /
                             Total: {{equipamentos.filter(e=>e.tipo===tipo).length}} <i class="fas fa-chevron-down"></i>
                         </div>
-                        <ul v-if="estoqueVisivel[tipo]" class="list-group mb-3">
-                            <li v-for="equip in equipamentos.filter(e=>e.tipo===tipo)" :key="equip.patrimonio"
-                                class="list-group-item d-flex justify-content-between align-items-center">
-                                <div><i
-                                        :class="[iconeTipo(equip.tipo), equip.situacao==='Disponível'?'icon-disponivel':'icon-indisponivel','mr-2']"></i>{{equip.modelo}}
-                                    ({{equip.patrimonio}}) – {{equip.situacao}}</div>
-                                <button v-if="isAdmin" class="btn btn-sm btn-danger" @click="removerEquipamento(equip.patrimonio)"><i
-                                        class="fas fa-trash"></i></button>
-                            </li>
-                        </ul>
+                        <div v-if="estoqueVisivel[tipo]">
+                            <div v-for="modelo in modelosPorTipo(tipo)" :key="modelo.modelo" class="card mb-3">
+                                <div class="card-header py-2">
+                                    <strong>{{ modelo.modelo }}</strong>
+                                    <span class="badge badge-primary ml-2">
+                                        {{ equipamentos.filter(e => e.tipo === tipo && e.modelo === modelo.modelo).length }} itens
+                                    </span>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="patrimonio-list">
+                                        <div v-for="equip in equipamentos.filter(e => e.tipo === tipo && e.modelo === modelo.modelo)" 
+                                             :key="equip.patrimonio" class="patrimonio-item d-flex justify-content-between">
+                                            <div>
+                                                <i :class="[iconeTipo(equip.tipo), equip.situacao==='Disponível'?'icon-disponivel':'icon-indisponivel','mr-2']"></i>
+                                                {{ equip.patrimonio }} – {{ equip.situacao }}
+                                            </div>
+                                            <button v-if="isAdmin" class="btn btn-sm btn-danger" @click="removerEquipamento(equip.patrimonio)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -477,7 +557,13 @@
                 abaAtiva: 'atribuicao',
                 novoUsuario: '', novoCpf: '', novoEmail: '', novaLocalizacao: '',
                 equipamentosSelecionados: [], softwaresSelecionados: [{ nome: '', chave: '' }],
-                estoqueVisivel: {}, novoEquipamento: { tipo: '', modelo: '', patrimonio: '' },
+                estoqueVisivel: {}, 
+                novoEquipamento: { 
+                    tipo: '', 
+                    modelo: '', 
+                    patrimonio: '',
+                    novoTipo: '' 
+                },
                 novoSoftware: { nome: '', chave: '', situacao: 'Disponível' },
                 equipamentos: [], atribuicoes: [], softwares: [],
                 mesRelatorio: new Date().getMonth() + 1, anoRelatorio: new Date().getFullYear(),
@@ -485,7 +571,16 @@
                 adminCredentials: {
                     usuario: 'admin',
                     senha: 'admin123' // Em produção, use hash/salt e armazene no backend
-                }
+                },
+                // Novos dados para gestão de modelos e patrimônios
+                novoModelo: {
+                    tipo: '',
+                    modelo: '',
+                    novoTipo: ''
+                },
+                modelosCadastrados: [],
+                modeloSelecionado: null,
+                patrimoniosParaAdicionar: ''
             },
             mounted() {
                 const s = localStorage.getItem('sistema');
@@ -493,17 +588,23 @@
                     const st = JSON.parse(s); 
                     this.equipamentos = st.equipamentos || []; 
                     this.atribuicoes = st.atribuicoes || []; 
-                    this.softwares = st.softwares || []; 
+                    this.softwares = st.softwares || [];
+                    this.modelosCadastrados = st.modelosCadastrados || this.extrairModelosUnicos(st.equipamentos || []);
                 }
                 else { 
+                    // Dados iniciais de exemplo
                     this.equipamentos = [
-                        ...Array(5)].map((_, i) => ({ tipo: 'Monitor', modelo: 'Samsung 24\"', patrimonio: `M-S24-${i + 1}`, situacao: 'Disponível' })), 
-                        [...Array(5)].map((_, i) => ({ tipo: 'Notebook', modelo: 'Lenovo i5', patrimonio: `N-L13-${i + 1}`, situacao: 'Disponível' }));
+                        { tipo: 'Monitor', modelo: 'Samsung 24"', patrimonio: 'M-S24-001', situacao: 'Disponível' },
+                        { tipo: 'Monitor', modelo: 'Samsung 24"', patrimonio: 'M-S24-002', situacao: 'Disponível' },
+                        { tipo: 'Notebook', modelo: 'Lenovo i5', patrimonio: 'N-L13-001', situacao: 'Disponível' },
+                        { tipo: 'Notebook', modelo: 'Lenovo i5', patrimonio: 'N-L13-002', situacao: 'Disponível' }
+                    ];
                     this.softwares = [
                         { nome: 'AutoCAD Collection', chave: 'AC-2023-XXXX', situacao: 'Disponível' },
                         { nome: 'GstarCAD', chave: 'GS-2023-YYYY', situacao: 'Disponível' },
                         { nome: 'CypeCAD', chave: 'CC-2023-ZZZZ', situacao: 'Disponível' }
                     ];
+                    this.modelosCadastrados = this.extrairModelosUnicos(this.equipamentos);
                 }
                 
                 // Verificar se já está logado (apenas para desenvolvimento)
@@ -514,9 +615,17 @@
                 }
             },
             watch: {
-                equipamentos: { handler: 'save', deep: true }, 
+                equipamentos: { 
+                    handler: function(newVal) {
+                        this.save();
+                        // Atualiza modelos cadastrados quando equipamentos mudam
+                        this.modelosCadastrados = this.extrairModelosUnicos(newVal);
+                    }, 
+                    deep: true 
+                }, 
                 atribuicoes: { handler: 'save', deep: true },
-                softwares: { handler: 'save', deep: true }
+                softwares: { handler: 'save', deep: true },
+                modelosCadastrados: { handler: 'save', deep: true }
             },
             computed: {
                 equipamentosDisponiveis() { return this.equipamentos.filter(e => e.situacao === 'Disponível') },
@@ -537,6 +646,90 @@
                 }) }
             },
             methods: {
+                extrairModelosUnicos(equipamentos) {
+                    const modelos = {};
+                    equipamentos.forEach(e => {
+                        const key = `${e.tipo}|${e.modelo}`;
+                        if (!modelos[key]) {
+                            modelos[key] = {
+                                tipo: e.tipo,
+                                modelo: e.modelo
+                            };
+                        }
+                    });
+                    return Object.values(modelos);
+                },
+                modelosPorTipo(tipo) {
+                    return this.modelosCadastrados.filter(m => m.tipo === tipo);
+                },
+                adicionarModelo() {
+                    const tipo = this.novoModelo.tipo === 'outro' 
+                        ? this.novoModelo.novoTipo 
+                        : this.novoModelo.tipo;
+                    
+                    const novoModelo = {
+                        tipo: tipo,
+                        modelo: this.novoModelo.modelo
+                    };
+                    
+                    // Verifica se o modelo já existe
+                    const modeloExistente = this.modelosCadastrados.find(m => 
+                        m.tipo === novoModelo.tipo && m.modelo === novoModelo.modelo
+                    );
+                    
+                    if (!modeloExistente) {
+                        this.modelosCadastrados.push(novoModelo);
+                        this.novoModelo = { tipo: '', modelo: '', novoTipo: '' };
+                        alert('Modelo cadastrado com sucesso!');
+                    } else {
+                        alert('Este modelo já está cadastrado!');
+                    }
+                },
+                adicionarPatrimonios() {
+                    if (this.modeloSelecionado === null || this.modeloSelecionado === '') {
+                        alert('Selecione um modelo primeiro!');
+                        return;
+                    }
+                    
+                    if (!this.patrimoniosParaAdicionar.trim()) {
+                        alert('Digite pelo menos um número de patrimônio!');
+                        return;
+                    }
+                    
+                    const modelo = this.modelosCadastrados[this.modeloSelecionado];
+                    const patrimonios = this.patrimoniosParaAdicionar.split('\n')
+                        .map(p => p.trim())
+                        .filter(p => p.length > 0);
+                    
+                    let adicionados = 0;
+                    let duplicados = 0;
+                    
+                    patrimonios.forEach(patrimonio => {
+                        // Verifica se o patrimônio já existe
+                        const existe = this.equipamentos.some(e => e.patrimonio === patrimonio);
+                        
+                        if (!existe) {
+                            this.equipamentos.push({
+                                tipo: modelo.tipo,
+                                modelo: modelo.modelo,
+                                patrimonio: patrimonio,
+                                situacao: 'Disponível'
+                            });
+                            adicionados++;
+                        } else {
+                            duplicados++;
+                        }
+                    });
+                    
+                    this.patrimoniosParaAdicionar = '';
+                    
+                    let mensagem = `${adicionados} patrimônios adicionados com sucesso para o modelo ${modelo.modelo}.`;
+                    if (duplicados > 0) {
+                        mensagem += ` ${duplicados} patrimônios não foram adicionados porque já existem.`;
+                    }
+                    
+                    alert(mensagem);
+                },
                 fazerLogin() {
                     if (this.login.usuario === this.adminCredentials.usuario && 
                         this.login.senha === this.adminCredentials.senha) {
@@ -549,14 +742,12 @@
                         this.mensagemErro = 'Usuário ou senha incorretos';
                     }
                 },
-                
                 entrarComoVisitante() {
                     this.usuarioLogado = true;
                     this.isAdmin = false;
                     localStorage.setItem('loggedIn', 'true');
                     localStorage.setItem('isAdmin', 'false');
                 },
-                
                 sair() {
                     this.usuarioLogado = false;
                     this.isAdmin = false;
@@ -565,12 +756,12 @@
                     this.login.usuario = '';
                     this.login.senha = '';
                 },
-                
                 save() { 
                     localStorage.setItem('sistema', JSON.stringify({ 
                         equipamentos: this.equipamentos, 
                         atribuicoes: this.atribuicoes,
-                        softwares: this.softwares
+                        softwares: this.softwares,
+                        modelosCadastrados: this.modelosCadastrados
                     })); 
                 },
                 toggleEstoque(tipo) { this.$set(this.estoqueVisivel, tipo, !this.estoqueVisivel[tipo]) },
@@ -619,13 +810,21 @@
                     this.softwaresSelecionados = [{ nome: '', chave: '' }]; 
                     alert('Atribuição salva com sucesso.');
                 },
-                adicionarEquipamento() { 
-                    this.equipamentos.push({ ...this.novoEquipamento, situacao: 'Disponível' }); 
-                    this.novoEquipamento = { tipo: '', modelo: '', patrimonio: '' } 
-                },
                 removerEquipamento(p) { 
-                    const i = this.equipamentos.findIndex(e => e.patrimonio === p); 
-                    if (i >= 0) this.equipamentos.splice(i, 1) 
+                    if (confirm('Tem certeza que deseja remover este equipamento?')) {
+                        // Verificar se o equipamento está atribuído
+                        const emUso = this.atribuicoes.some(a => 
+                            a.equipamentos.some(e => e.patrimonio === p)
+                        );
+                        
+                        if (emUso) {
+                            alert('Este equipamento está atribuído a um usuário e não pode ser removido!');
+                            return;
+                        }
+                        
+                        const i = this.equipamentos.findIndex(e => e.patrimonio === p); 
+                        if (i >= 0) this.equipamentos.splice(i, 1);
+                    }
                 },
                 adicionarSoftware() {
                     this.softwares.push({ ...this.novoSoftware });
