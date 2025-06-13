@@ -286,21 +286,18 @@
                     </div>
                 </div>
 
-                <!-- Atribuição -->
+                <!-- Atribuição (SEM CPF) -->
                 <div v-if="abaAtiva==='atribuicao'">
                     <h4>Atribuir Equipamentos</h4>
                     <form @submit.prevent="atribuirEquipamentos">
                         <div class="form-row">
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <input type="text" class="form-control" v-model="novoUsuario" placeholder="Nome" required />
                             </div>
-                            <div class="form-group col-md-3">
-                                <input type="text" class="form-control" v-model="novoCpf" placeholder="CPF" v-mask="'###.###.###-##'" required />
-                            </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <input type="email" class="form-control" v-model="novoEmail" placeholder="Email" />
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <input type="text" class="form-control" v-model="novaLocalizacao" placeholder="Localização" />
                             </div>
                         </div>
@@ -344,7 +341,7 @@
                     </form>
                 </div>
 
-                <!-- Estoque - Versão Melhorada -->
+                <!-- Estoque -->
                 <div v-if="abaAtiva==='estoque'">
                     <h4>Estoque</h4>
                     
@@ -486,14 +483,13 @@
                     </div>
                 </div>
 
-                <!-- Usuários -->
+                <!-- Usuários (SEM CPF) -->
                 <div v-if="abaAtiva==='usuarios'">
                     <h4>Usuários</h4>
                     <div v-if="atribuicoes.length===0">Nenhuma atribuição feita.</div>
                     <div class="usuarios-scroll">
                         <div v-for="(a,i) in atribuicoes" :key="i" class="card-user">
                             <h5>{{a.usuario}}</h5>
-                            <p><strong>CPF:</strong> {{a.cpf}}</p>
                             <p><strong>Email:</strong> {{a.email}}</p>
                             <p><strong>Localização:</strong> {{a.localizacao}}</p>
                             <p><strong>Equipamentos:</strong></p>
@@ -522,28 +518,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-masker/1.2.0/vanilla-masker.min.js"></script>
     <script>
-        // Máscara para CPF - Versão corrigida
-        Vue.directive('mask', {
-            bind: function (el, binding) {
-                el.addEventListener('input', function (e) {
-                    if (!e.isTrusted) return;
-                    const mask = binding.value;
-                    let value = e.target.value.replace(/\D/g, '');
-                    let maskedValue = '';
-                    
-                    for (let i = 0, j = 0; i < mask.length && j < value.length; i++) {
-                        if (mask[i] === '#') {
-                            maskedValue += value[j++];
-                        } else {
-                            maskedValue += mask[i];
-                        }
-                    }
-                    
-                    e.target.value = maskedValue;
-                });
-            }
-        });
-
         new Vue({
             el: '#app',
             data: {
@@ -555,7 +529,7 @@
                 },
                 mensagemErro: '',
                 abaAtiva: 'atribuicao',
-                novoUsuario: '', novoCpf: '', novoEmail: '', novaLocalizacao: '',
+                novoUsuario: '', novoEmail: '', novaLocalizacao: '', // Removido novoCpf
                 equipamentosSelecionados: [], softwaresSelecionados: [{ nome: '', chave: '' }],
                 estoqueVisivel: {}, 
                 novoEquipamento: { 
@@ -567,12 +541,10 @@
                 novoSoftware: { nome: '', chave: '', situacao: 'Disponível' },
                 equipamentos: [], atribuicoes: [], softwares: [],
                 mesRelatorio: new Date().getMonth() + 1, anoRelatorio: new Date().getFullYear(),
-                // Credenciais do administrador (em um sistema real, isso deve ser armazenado de forma segura)
                 adminCredentials: {
                     usuario: 'admin',
-                    senha: 'admin123' // Em produção, use hash/salt e armazene no backend
+                    senha: 'admin123'
                 },
-                // Novos dados para gestão de modelos e patrimônios
                 novoModelo: {
                     tipo: '',
                     modelo: '',
@@ -592,7 +564,6 @@
                     this.modelosCadastrados = st.modelosCadastrados || this.extrairModelosUnicos(st.equipamentos || []);
                 }
                 else { 
-                    // Dados iniciais de exemplo
                     this.equipamentos = [
                         { tipo: 'Monitor', modelo: 'Samsung 24"', patrimonio: 'M-S24-001', situacao: 'Disponível' },
                         { tipo: 'Monitor', modelo: 'Samsung 24"', patrimonio: 'M-S24-002', situacao: 'Disponível' },
@@ -607,7 +578,6 @@
                     this.modelosCadastrados = this.extrairModelosUnicos(this.equipamentos);
                 }
                 
-                // Verificar se já está logado (apenas para desenvolvimento)
                 const loggedIn = localStorage.getItem('loggedIn');
                 if (loggedIn) {
                     this.usuarioLogado = true;
@@ -618,7 +588,6 @@
                 equipamentos: { 
                     handler: function(newVal) {
                         this.save();
-                        // Atualiza modelos cadastrados quando equipamentos mudam
                         this.modelosCadastrados = this.extrairModelosUnicos(newVal);
                     }, 
                     deep: true 
@@ -672,7 +641,6 @@
                         modelo: this.novoModelo.modelo
                     };
                     
-                    // Verifica se o modelo já existe
                     const modeloExistente = this.modelosCadastrados.find(m => 
                         m.tipo === novoModelo.tipo && m.modelo === novoModelo.modelo
                     );
@@ -705,7 +673,6 @@
                     let duplicados = 0;
                     
                     patrimonios.forEach(patrimonio => {
-                        // Verifica se o patrimônio já existe
                         const existe = this.equipamentos.some(e => e.patrimonio === patrimonio);
                         
                         if (!existe) {
@@ -779,19 +746,17 @@
                     const software = this.softwares.find(s => s.nome === nomeSoftware && s.situacao === 'Disponível');
                     if (software) {
                         this.softwaresSelecionados[index].chave = software.chave;
-                        // Marcar como indisponível no estoque
                         software.situacao = 'Indisponível';
                     }
                 },
                 atribuirEquipamentos() {
-                    if (!this.novoUsuario || !this.novoCpf || !this.equipamentosSelecionados.length) { 
-                        alert('Informe nome, CPF e selecione pelo menos um equipamento.'); 
+                    if (!this.novoUsuario || !this.equipamentosSelecionados.length) { 
+                        alert('Informe nome e selecione pelo menos um equipamento.'); 
                         return 
                     }
                     
                     const atrib = {
-                        usuario: this.novoUsuario, 
-                        cpf: this.novoCpf,
+                        usuario: this.novoUsuario,
                         email: this.novoEmail, 
                         localizacao: this.novaLocalizacao,
                         equipamentos: this.equipamentos.filter(e => this.equipamentosSelecionados.includes(e.patrimonio)),
@@ -799,20 +764,18 @@
                         data: new Date().toISOString()
                     };
                     
-                    // Atualizar status dos equipamentos
                     this.equipamentos = this.equipamentos.map(e => 
                         this.equipamentosSelecionados.includes(e.patrimonio) ? { ...e, situacao: 'Indisponível' } : e
                     );
                     
                     this.atribuicoes.push(atrib);
-                    this.novoUsuario = this.novoCpf = this.novoEmail = this.novaLocalizacao = ''; 
+                    this.novoUsuario = this.novoEmail = this.novaLocalizacao = ''; 
                     this.equipamentosSelecionados = []; 
                     this.softwaresSelecionados = [{ nome: '', chave: '' }]; 
                     alert('Atribuição salva com sucesso.');
                 },
                 removerEquipamento(p) { 
                     if (confirm('Tem certeza que deseja remover este equipamento?')) {
-                        // Verificar se o equipamento está atribuído
                         const emUso = this.atribuicoes.some(a => 
                             a.equipamentos.some(e => e.patrimonio === p)
                         );
@@ -832,7 +795,6 @@
                 },
                 removerSoftwareCadastrado(index) {
                     if (confirm('Tem certeza que deseja remover este software?')) {
-                        // Verificar se o software está em uso
                         const sw = this.softwares[index];
                         const emUso = this.atribuicoes.some(a => 
                             a.softwares.some(s => s.nome === sw.nome && s.chave === sw.chave)
@@ -854,12 +816,10 @@
                 excluirUsuario(i) { 
                     if (confirm("Excluir essa atribuição?")) { 
                         const a = this.atribuicoes[i]; 
-                        // Liberar equipamentos
                         a.equipamentos.forEach(eq => { 
                             const e = this.equipamentos.find(x => x.patrimonio === eq.patrimonio); 
                             if (e) e.situacao = 'Disponível' 
                         }); 
-                        // Liberar softwares
                         a.softwares.forEach(sw => {
                             const s = this.softwares.find(x => x.nome === sw.nome && x.chave === sw.chave);
                             if (s) s.situacao = 'Disponível';
@@ -870,12 +830,10 @@
                 editarUsuario(i) { 
                     const a = this.atribuicoes[i]; 
                     this.novoUsuario = a.usuario; 
-                    this.novoCpf = a.cpf;
                     this.novoEmail = a.email; 
                     this.novaLocalizacao = a.localizacao; 
                     this.equipamentosSelecionados = a.equipamentos.map(e => e.patrimonio); 
                     this.softwaresSelecionados = JSON.parse(JSON.stringify(a.softwares)); 
-                    // Liberar equipamentos e softwares para edição
                     a.equipamentos.forEach(eq => { 
                         const e = this.equipamentos.find(x => x.patrimonio === eq.patrimonio); 
                         if (e) e.situacao = 'Disponível' 
@@ -894,14 +852,13 @@
                     }).map(a => [
                         a.data, 
                         a.usuario, 
-                        a.cpf,
                         a.email, 
                         a.localizacao, 
                         a.equipamentos.length, 
                         a.softwares.length
                     ]);
                     
-                    const header = ['Data', 'Usuário', 'CPF', 'Email', 'Localização', '# Equip', 'Softwares'];
+                    const header = ['Data', 'Usuário', 'Email', 'Localização', '# Equip', 'Softwares'];
                     const csv = [header, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\r\n');
                     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); 
                     const fname = `relatorio-${this.anoRelatorio}-${String(this.mesRelatorio).padStart(2, '0')}.csv`;
@@ -918,12 +875,10 @@
                     const { jsPDF } = window.jspdf;
                     const doc = new jsPDF();
                     
-                    // Configurações do documento
                     const margin = 15;
                     const lineHeight = 7;
                     let y = margin;
                     
-                    // Logo e cabeçalho
                     doc.setFontSize(16);
                     doc.setFont('helvetica', 'bold');
                     doc.text('STCP ENGENHARIA', 105, y, { align: 'center' });
@@ -933,21 +888,18 @@
                     doc.text('TERMO DE RESPONSABILIDADE', 105, y, { align: 'center' });
                     y += lineHeight * 2;
                     
-                    // Corpo do termo
                     doc.setFontSize(12);
                     doc.setFont('helvetica', 'normal');
                     
                     const dataFormatada = new Date(a.data).toLocaleDateString('pt-BR');
                     
-                    // Texto introdutório
-                    doc.text(`Eu, ${a.usuario}, CPF nº ${a.cpf}, lotado(a) em ${a.localizacao},`, margin, y);
+                    doc.text(`Eu, ${a.usuario}, lotado(a) em ${a.localizacao},`, margin, y);
                     y += lineHeight;
                     doc.text(`declaro ter recebido da STCP ENGENHARIA os equipamentos e softwares abaixo`, margin, y);
                     y += lineHeight;
                     doc.text(`relacionados em ${dataFormatada}:`, margin, y);
                     y += lineHeight * 1.5;
                     
-                    // Equipamentos
                     doc.setFont('helvetica', 'bold');
                     doc.text('Equipamentos:', margin, y);
                     y += lineHeight;
@@ -960,7 +912,6 @@
                     
                     y += lineHeight * 0.5;
                     
-                    // Softwares
                     doc.setFont('helvetica', 'bold');
                     doc.text('Softwares:', margin, y);
                     y += lineHeight;
@@ -973,7 +924,6 @@
                     
                     y += lineHeight * 1.5;
                     
-                    // Compromissos
                     doc.text('Comprometo-me a:', margin, y);
                     y += lineHeight;
                     doc.text('• Zelar pela integridade física e conservação dos equipamentos;', margin + 5, y);
@@ -985,16 +935,13 @@
                     doc.text('• Devolvê-los nas mesmas condições ao término do uso ou solicitação.', margin + 5, y);
                     y += lineHeight * 2;
                     
-                    // Local e data
                     doc.text(`Goiânia, ${dataFormatada}.`, margin, y);
                     y += lineHeight * 3;
                     
-                    // Assinatura
                     doc.text('___________________________________', 105, y, { align: 'center' });
                     y += lineHeight;
                     doc.text('(Assinatura do responsável)', 105, y, { align: 'center' });
                     
-                    // Salvar o PDF
                     doc.save(`termo_responsabilidade_${a.usuario}_${dataFormatada.replace(/\//g, '-')}.pdf`);
                 }
             }
