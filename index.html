@@ -188,6 +188,18 @@
             padding: 5px 10px;
             border-bottom: 1px solid #eee;
         }
+
+        .software-info .badge {
+            font-size: 0.75em;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+        
+        .software-count {
+            font-weight: bold;
+            color: #306aa4;
+            margin-left: 5px;
+        }
     </style>
 </head>
 
@@ -462,6 +474,12 @@
                     </div>
                     
                     <h5>Softwares Cadastrados</h5>
+                    <div class="mb-3">
+                        <div v-for="(sw, nome) in resumoSoftwares" :key="nome" class="badge badge-info mr-2 mb-2">
+                            {{ nome }}: {{ sw.total }} <span v-if="sw.disponiveis !== sw.total">({{ sw.disponiveis }}D)</span>
+                        </div>
+                    </div>
+                    
                     <div v-if="softwares.length === 0" class="alert alert-info">Nenhum software cadastrado.</div>
                     <div v-else>
                         <div v-for="(sw, index) in softwares" :key="index" class="software-item">
@@ -469,6 +487,9 @@
                                 <strong>{{ sw.nome }}</strong> - {{ sw.chave }} 
                                 <span :class="sw.situacao === 'Disponível' ? 'text-success' : 'text-danger'">
                                     ({{ sw.situacao }})
+                                </span>
+                                <span class="badge badge-secondary">
+                                    Atribuições: {{ contarAtribuicoesSoftware(sw.nome, sw.chave) }}
                                 </span>
                             </div>
                             <div class="software-acoes">
@@ -486,9 +507,26 @@
                 <!-- Usuários (SEM CPF) -->
                 <div v-if="abaAtiva==='usuarios'">
                     <h4>Usuários</h4>
-                    <div v-if="atribuicoes.length===0">Nenhuma atribuição feita.</div>
+                    
+                    <!-- Barra de Pesquisa -->
+                    <div class="form-group mb-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" v-model="filtroUsuario" 
+                                   placeholder="Pesquisar por nome de usuário...">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" @click="filtroUsuario = ''">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div v-if="atribuicoesFiltradas.length===0" class="alert alert-info">
+                        Nenhuma atribuição encontrada.
+                    </div>
+                    
                     <div class="usuarios-scroll">
-                        <div v-for="(a,i) in atribuicoes" :key="i" class="card-user">
+                        <div v-for="(a,i) in atribuicoesFiltradas" :key="i" class="card-user">
                             <h5>{{a.usuario}}</h5>
                             <p><strong>Email:</strong> {{a.email}}</p>
                             <p><strong>Localização:</strong> {{a.localizacao}}</p>
@@ -529,7 +567,7 @@
                 },
                 mensagemErro: '',
                 abaAtiva: 'atribuicao',
-                novoUsuario: '', novoEmail: '', novaLocalizacao: '', // Removido novoCpf
+                novoUsuario: '', novoEmail: '', novaLocalizacao: '',
                 equipamentosSelecionados: [], softwaresSelecionados: [{ nome: '', chave: '' }],
                 estoqueVisivel: {}, 
                 novoEquipamento: { 
@@ -552,7 +590,8 @@
                 },
                 modelosCadastrados: [],
                 modeloSelecionado: null,
-                patrimoniosParaAdicionar: ''
+                patrimoniosParaAdicionar: '',
+                filtroUsuario: ''
             },
             mounted() {
                 const s = localStorage.getItem('sistema');
@@ -612,9 +651,37 @@
                         disponiveis: dispon, 
                         indisponiveis: total - dispon 
                     } 
-                }) }
+                }) },
+                atribuicoesFiltradas() {
+                    if (!this.filtroUsuario) return this.atribuicoes;
+                    const termo = this.filtroUsuario.toLowerCase();
+                    return this.atribuicoes.filter(a => 
+                        a.usuario.toLowerCase().includes(termo)
+                    );
+                },
+                resumoSoftwares() {
+                    const resumo = {};
+                    this.softwares.forEach(sw => {
+                        if (!resumo[sw.nome]) {
+                            resumo[sw.nome] = {
+                                total: 0,
+                                disponiveis: 0
+                            };
+                        }
+                        resumo[sw.nome].total++;
+                        if (sw.situacao === 'Disponível') {
+                            resumo[sw.nome].disponiveis++;
+                        }
+                    });
+                    return resumo;
+                }
             },
             methods: {
+                contarAtribuicoesSoftware(nome, chave) {
+                    return this.atribuicoes.reduce((total, atribuicao) => {
+                        return total + atribuicao.softwares.filter(s => s.nome === nome && s.chave === chave).length;
+                    }, 0);
+                },
                 extrairModelosUnicos(equipamentos) {
                     const modelos = {};
                     equipamentos.forEach(e => {
