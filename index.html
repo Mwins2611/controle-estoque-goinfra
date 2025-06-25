@@ -11,9 +11,21 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
     <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --info-color: #2980b9;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+
         body {
             padding-top: 100px;
-            background-color: #306aa4;
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .fixed-header {
@@ -22,183 +34,215 @@
             width: 100%;
             background: white;
             z-index: 1000;
-            border-bottom: 1px solid #ccc;
-            padding: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #ddd;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
-        .card-user {
-            border: 1px solid #ddd;
+        .fixed-header h3 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .fixed-header h5 {
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .card {
             border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: none;
+            margin-bottom: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            font-weight: 600;
+            border-radius: 10px 10px 0 0 !important;
+        }
+
+        .btn {
+            border-radius: 6px;
+            font-weight: 500;
+            padding: 8px 16px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            border-color: var(--warning-color);
+        }
+
+        .btn-info {
+            background-color: var(--info-color);
+            border-color: var(--info-color);
+        }
+
+        .nav-tabs {
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: #7f8c8d;
+            font-weight: 500;
+            padding: 10px 20px;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--secondary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            background-color: transparent;
+        }
+
+        .form-control {
+            border-radius: 6px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        .alert {
+            border-radius: 6px;
+        }
+
+        .badge {
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 12px;
+        }
+
+        .user-info {
+            position: fixed;
+            top: 15px;
+            right: 15px;
             background: white;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            font-size: 14px;
         }
 
-        .btn-remove-software {
-            color: red;
-            cursor: pointer;
-            font-size: 1.2em;
+        .user-info .badge {
+            margin-left: 8px;
+            font-size: 12px;
         }
 
-        .estoque-toggle {
-            cursor: pointer;
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
         }
 
-        .icon-disponivel {
-            color: green;
+        .search-box .form-control {
+            padding-left: 40px;
         }
 
-        .icon-indisponivel {
-            color: gray;
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 12px;
+            color: #95a5a6;
         }
 
-        .usuarios-scroll {
+        .advanced-search {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .status-badge {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .status-available {
+            background-color: var(--success-color);
+        }
+
+        .status-unavailable {
+            background-color: var(--danger-color);
+        }
+
+        .equipment-card {
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .software-card {
+            border-left: 4px solid var(--info-color);
+        }
+
+        .user-card {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .scrollable-container {
             max-height: 500px;
             overflow-y: auto;
             padding-right: 10px;
         }
 
-        .dispositivo-header {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            padding: 10px;
-            background: #fff;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border: 1px solid #dee2e6;
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 0.3s;
+        }
+        .fade-enter, .fade-leave-to {
+            opacity: 0;
         }
 
-        .dispositivo-item {
-            display: flex;
-            align-items: center;
-            padding: 8px 12px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            margin: 5px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            min-width: 180px;
-        }
-
-        .dispositivo-info {
-            display: flex;
-            flex-direction: column;
-            margin-left: 8px;
-        }
-
-        .dispositivo-tipo {
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 2px;
-        }
-
-        .dispositivo-totais {
-            display: flex;
-            align-items: center;
-            font-size: 13px;
-        }
-
-        .disponivel {
-            color: #28a745;
-            font-weight: bold;
-        }
-
-        .indisponivel {
-            color: #dc3545;
-            font-weight: bold;
-        }
-
-        .total {
-            color: #6c757d;
-            font-weight: bold;
-        }
-
-        .separador {
-            margin: 0 4px;
-            color: #adb5bd;
-        }
-
-        .nav-tabs {
-            margin-bottom: 20px;
-            background: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-        
-        .software-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .software-info {
-            flex-grow: 1;
-        }
-        
-        .software-acoes {
-            min-width: 100px;
-            text-align: right;
-        }
-        
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .user-info {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            z-index: 1001;
-        }
-        
-        .modelo-card {
-            border-left: 4px solid #306aa4;
-        }
-        
-        .patrimonio-list {
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        
-        .patrimonio-item {
-            padding: 5px 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .software-info .badge {
-            font-size: 0.75em;
-            vertical-align: middle;
-            margin-left: 5px;
-        }
-        
-        .software-count {
-            font-weight: bold;
-            color: #306aa4;
-            margin-left: 5px;
+        /* Responsividade */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 120px;
+            }
+            
+            .fixed-header {
+                padding: 10px;
+            }
+            
+            .user-info {
+                top: 10px;
+                right: 10px;
+                padding: 5px 10px;
+            }
         }
     </style>
 </head>
@@ -206,33 +250,69 @@
 <body>
     <div id="app">
         <!-- Tela de Login -->
-        <div v-if="!usuarioLogado" class="login-container">
-            <h3 class="text-center mb-4">Acesso Administrativo</h3>
-            <div class="form-group">
-                <label>Usuário</label>
-                <input type="text" class="form-control" v-model="login.usuario" placeholder="Digite seu usuário">
-            </div>
-            <div class="form-group">
-                <label>Senha</label>
-                <input type="password" class="form-control" v-model="login.senha" placeholder="Digite sua senha" @keyup.enter="fazerLogin">
-            </div>
-            <button class="btn btn-primary btn-block" @click="fazerLogin">Entrar</button>
-            
-            <div v-if="mensagemErro" class="alert alert-danger mt-3">
-                {{ mensagemErro }}
-            </div>
-            
-            <div class="mt-3 text-center">
-                <p><small>Para acessar como visitante, clique <a href="#" @click.prevent="entrarComoVisitante">aqui</a></small></p>
+        <div v-if="!usuarioLogado" class="container login-container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card shadow">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <h3 class="font-weight-bold text-primary">Controle de Estoque</h3>
+                                <p class="text-muted">Acesso ao sistema</p>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Usuário</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" v-model="login.usuario" placeholder="Digite seu usuário">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Senha</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    </div>
+                                    <input type="password" class="form-control" v-model="login.senha" placeholder="Digite sua senha" @keyup.enter="fazerLogin">
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary btn-block mt-4" @click="fazerLogin">
+                                <i class="fas fa-sign-in-alt mr-2"></i> Entrar
+                            </button>
+                            
+                            <div v-if="mensagemErro" class="alert alert-danger mt-3 mb-0">
+                                <i class="fas fa-exclamation-circle mr-2"></i> {{ mensagemErro }}
+                            </div>
+                            
+                            <div class="mt-3 text-center">
+                                <p class="mb-0"><small>Para acessar como visitante, clique <a href="#" @click.prevent="entrarComoVisitante">aqui</a></small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Sistema Principal -->
         <div v-if="usuarioLogado">
-            <div class="user-info">
-                <span v-if="isAdmin">Administrador</span>
-                <span v-else>Visitante</span>
-                <button class="btn btn-sm btn-link" @click="sair">Sair</button>
+            <div class="user-info d-flex align-items-center">
+                <i class="fas fa-user-circle mr-2"></i>
+                <span>{{ usuarioAtual.nome || 'Usuário' }}</span>
+                <span class="badge" :class="{
+                    'badge-primary': usuarioAtual.perfil === 'Administrador',
+                    'badge-secondary': usuarioAtual.perfil === 'Supervisor',
+                    'badge-success': usuarioAtual.perfil === 'Usuário',
+                    'badge-info': usuarioAtual.perfil === 'Visitante'
+                }">
+                    {{ usuarioAtual.perfil }}
+                </span>
+                <button class="btn btn-link btn-sm text-danger ml-2 p-0" @click="sair">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
             </div>
             
             <div class="fixed-header">
@@ -241,215 +321,38 @@
             </div>
 
             <div class="container">
-                <div class="dispositivo-header">
-                    <!-- Dispositivos -->
-                    <div v-for="(item, i) in totaisDispositivos" :key="'d'+i" class="dispositivo-item">
-                        <i :class="[item.icone, 'mr-2']"></i>
-                        <div class="dispositivo-info">
-                            <span class="dispositivo-tipo">{{ item.tipo }}</span>
-                            <div class="dispositivo-totais">
-                                <span class="disponivel">{{ item.disponiveis }}D</span>
-                                <span class="separador">/</span>
-                                <span class="indisponivel">{{ item.indisponiveis }}I</span>
-                                <span class="separador">|</span>
-                                <span class="total">{{ item.total }}T</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Softwares -->
-                    <div class="dispositivo-item">
-                        <i class="fas fa-copyright mr-2"></i>
-                        <div class="dispositivo-info">
-                            <span class="dispositivo-tipo">Softwares</span>
-                            <div class="dispositivo-totais">
-                                <span class="disponivel">{{ totalSoftwaresDisponiveis }}D</span>
-                                <span class="separador">/</span>
-                                <span class="indisponivel">{{ totalSoftwaresIndisponiveis }}I</span>
-                                <span class="separador">|</span>
-                                <span class="total">{{ softwares.length }}T</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <ul class="nav nav-tabs mb-4">
-                    <li class="nav-item"><a class="nav-link" :class="{active: abaAtiva==='atribuicao'}" href="#"
-                            @click.prevent="abaAtiva='atribuicao'">Atribuição</a></li>
-                    <li class="nav-item"><a class="nav-link" :class="{active: abaAtiva==='estoque'}" href="#"
-                            @click.prevent="abaAtiva='estoque'">Estoque</a></li>
-                    <li class="nav-item"><a class="nav-link" :class="{active: abaAtiva==='usuarios'}" href="#"
-                            @click.prevent="abaAtiva='usuarios'">Usuários</a></li>
-                    <li class="nav-item"><a class="nav-link" :class="{active: abaAtiva==='softwares'}" href="#"
-                            @click.prevent="abaAtiva='softwares'">Softwares</a></li>
-                    <li class="nav-item"><a class="nav-link" :class="{active: abaAtiva==='relatorio'}" href="#"
-                            @click.prevent="abaAtiva='relatorio'">Relatório</a></li>
-                </ul>
-
-                <!-- Relatório -->
-                <div v-if="abaAtiva==='relatorio'" class="card mb-4">
-                    <h5>Relatório Mensal</h5>
-                    <div class="form-inline">
-                        <select v-model="mesRelatorio" class="form-control mr-2">
-                            <option v-for="m in 12" :value="m">{{m}}</option>
-                        </select>
-                        <input type="number" v-model="anoRelatorio" class="form-control mr-2" placeholder="Ano" />
-                        <button class="btn btn-primary" @click="gerarRelatorio()">Baixar CSV</button>
-                    </div>
-                </div>
-
-                <!-- Atribuição (SEM CPF) -->
-                <div v-if="abaAtiva==='atribuicao'">
-                    <h4>Atribuir Equipamentos</h4>
-                    <form @submit.prevent="atribuirEquipamentos">
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <input type="text" class="form-control" v-model="novoUsuario" placeholder="Nome" required />
-                            </div>
-                            <div class="form-group col-md-4">
-                                <input type="email" class="form-control" v-model="novoEmail" placeholder="Email" />
-                            </div>
-                            <div class="form-group col-md-4">
-                                <input type="text" class="form-control" v-model="novaLocalizacao" placeholder="Localização" />
-                            </div>
-                        </div>
-                        <h5>Equipamentos Disponíveis</h5>
-                        <div v-for="tipo in tiposEquipamentos" :key="tipo" class="mb-3">
-                            <div class="estoque-toggle font-weight-bold mb-2" @click="toggleEstoque(tipo)">
-                                <i :class="[iconeTipo(tipo),'mr-2']"></i> {{tipo}} - Disponíveis: {{contarDisponiveis(tipo)}} <i
-                                    class="fas fa-chevron-down"></i>
-                            </div>
-                            <div v-if="estoqueVisivel[tipo]">
-                                <div class="form-check" v-for="equip in equipamentosDisponiveis.filter(e=>e.tipo===tipo)"
-                                    :key="equip.patrimonio">
-                                    <input class="form-check-input" type="checkbox" :value="equip.patrimonio"
-                                        v-model="equipamentosSelecionados" />
-                                    <label class="form-check-label">
-                                        <i :class="[iconeTipo(equip.tipo),'mr-2','icon-disponivel']"></i>{{equip.tipo}} –
-                                        {{equip.modelo}} ({{equip.patrimonio}})
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <h5 class="mt-4">Softwares</h5>
-                        <div v-for="(soft,i) in softwaresSelecionados" :key="i" class="form-row mb-2 align-items-center">
-                            <div class="col-md-4">
-                                <select class="form-control" v-model="soft.nome" @change="selecionarSoftware(i)">
-                                    <option disabled value="">Selecione o software</option>
-                                    <option v-for="sw in softwaresDisponiveis" :value="sw.nome" :disabled="sw.situacao === 'Indisponível'">
-                                        {{sw.nome}} ({{sw.situacao}})
-                                    </option>
-                                    <option>Outro</option>
-                                </select>
-                            </div>
-                            <div class="col-md-7"><input type="text" class="form-control" v-model="soft.chave"
-                                    placeholder="Chave de acesso" /></div>
-                            <div class="col-md-1"><span class="btn-remove-software" @click="removerSoftware(i)"><i
-                                        class="fas fa-minus-circle"></i></span></div>
-                        </div>
-                        <button class="btn btn-secondary btn-sm mb-3"
-                            @click.prevent="softwaresSelecionados.push({nome:'',chave:''})">Adicionar Software</button>
-                        <button class="btn btn-primary mt-2" type="submit">Salvar Atribuição</button>
-                    </form>
-                </div>
-
-                <!-- Estoque -->
-                <div v-if="abaAtiva==='estoque'">
-                    <h4>Estoque</h4>
-                    
-                    <!-- Cadastro de Modelos -->
-                    <div v-if="isAdmin" class="card mb-4 modelo-card">
-                        <div class="card-header bg-light">
-                            <h5>Cadastrar Novo Modelo</h5>
-                        </div>
-                        <div class="card-body">
-                            <form @submit.prevent="adicionarModelo" class="row g-3">
-                                <div class="col-md-4">
-                                    <label>Tipo</label>
-                                    <select class="form-control" v-model="novoModelo.tipo" required>
-                                        <option disabled value="">Selecione</option>
-                                        <option>Monitor</option>
-                                        <option>Notebook</option>
-                                        <option>Tablet</option>
-                                        <option>Desktop</option>
-                                        <option value="outro">Outro</option>
-                                    </select>
-                                    <input v-if="novoModelo.tipo === 'outro'" class="form-control mt-2" 
-                                           v-model="novoModelo.novoTipo" placeholder="Especificar tipo" required />
-                                </div>
-                                <div class="col-md-5">
-                                    <label>Modelo</label>
-                                    <input class="form-control" v-model="novoModelo.modelo" 
-                                           placeholder="Ex: Dell Optiplex 7080" required />
-                                </div>
-                                <div class="col-md-3 d-flex align-items-end">
-                                    <button type="submit" class="btn btn-primary w-100">
-                                        <i class="fas fa-save"></i> Salvar Modelo
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Adição de Patrimônios -->
-                    <div v-if="isAdmin && modelosCadastrados.length > 0" class="card mb-4">
-                        <div class="card-header bg-light">
-                            <h5>Adicionar Patrimônios</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label>Selecione o Modelo</label>
-                                    <select class="form-control" v-model="modeloSelecionado" required>
-                                        <option disabled value="">Selecione um modelo</option>
-                                        <option v-for="(modelo, index) in modelosCadastrados" :value="index">
-                                            {{ modelo.tipo }} - {{ modelo.modelo }}
-                                        </option>
-                                    </select>
+                <!-- Resumo de Estoque -->
+                <div class="card mb-4">
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div v-for="(item, i) in totaisDispositivos" :key="'d'+i" class="col-6 col-md-4 col-lg-2 mb-3 mb-lg-0">
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-3">
+                                        <i :class="[item.icone, 'text-primary', 'fa-2x']"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 font-weight-bold">{{ item.tipo }}</h6>
+                                        <small class="text-muted">
+                                            <span class="text-success">{{ item.disponiveis }}D</span> / 
+                                            <span class="text-danger">{{ item.indisponiveis }}I</span> | 
+                                            <span class="font-weight-bold">{{ item.total }}T</span>
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <label>Patrimônios (um por linha)</label>
-                                    <textarea class="form-control" v-model="patrimoniosParaAdicionar" 
-                                              rows="5" placeholder="Digite os números de patrimônio, um em cada linha" required></textarea>
-                                </div>
-                                <div class="col-md-4 d-flex align-items-end">
-                                    <button class="btn btn-success w-100" @click="adicionarPatrimonios">
-                                        <i class="fas fa-plus-circle"></i> Adicionar Patrimônios
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Lista de Equipamentos -->
-                    <div v-for="tipo in tiposEquipamentos" :key="tipo">
-                        <div class="estoque-toggle font-weight-bold mb-2" @click="toggleEstoque(tipo)">
-                            <i :class="[iconeTipo(tipo),'mr-2']"></i> {{tipo}} – Disponíveis: {{contarDisponiveis(tipo)}} /
-                            Total: {{equipamentos.filter(e=>e.tipo===tipo).length}} <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div v-if="estoqueVisivel[tipo]">
-                            <div v-for="modelo in modelosPorTipo(tipo)" :key="modelo.modelo" class="card mb-3">
-                                <div class="card-header py-2">
-                                    <strong>{{ modelo.modelo }}</strong>
-                                    <span class="badge badge-primary ml-2">
-                                        {{ equipamentos.filter(e => e.tipo === tipo && e.modelo === modelo.modelo).length }} itens
-                                    </span>
-                                </div>
-                                <div class="card-body p-0">
-                                    <div class="patrimonio-list">
-                                        <div v-for="equip in equipamentos.filter(e => e.tipo === tipo && e.modelo === modelo.modelo)" 
-                                             :key="equip.patrimonio" class="patrimonio-item d-flex justify-content-between">
-                                            <div>
-                                                <i :class="[iconeTipo(equip.tipo), equip.situacao==='Disponível'?'icon-disponivel':'icon-indisponivel','mr-2']"></i>
-                                                {{ equip.patrimonio }} – {{ equip.situacao }}
-                                            </div>
-                                            <button v-if="isAdmin" class="btn btn-sm btn-danger" @click="removerEquipamento(equip.patrimonio)">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
+                            <div class="col-6 col-md-4 col-lg-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-3">
+                                        <i class="fas fa-copyright text-primary fa-2x"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 font-weight-bold">Softwares</h6>
+                                        <small class="text-muted">
+                                            <span class="text-success">{{ totalSoftwaresDisponiveis }}D</span> / 
+                                            <span class="text-danger">{{ totalSoftwaresIndisponiveis }}I</span> | 
+                                            <span class="font-weight-bold">{{ softwares.length }}T</span>
+                                        </small>
                                     </div>
                                 </div>
                             </div>
@@ -457,99 +360,526 @@
                     </div>
                 </div>
 
-                <!-- Softwares -->
-                <div v-if="abaAtiva==='softwares'">
-                    <h4>Gerenciar Softwares</h4>
-                    <div v-if="isAdmin" class="mb-3">
-                        <h5>Adicionar Software</h5>
-                        <form @submit.prevent="adicionarSoftware" class="form-inline">
-                            <input class="form-control mr-2" type="text" v-model="novoSoftware.nome" placeholder="Nome do Software" required />
-                            <input class="form-control mr-2" type="text" v-model="novoSoftware.chave" placeholder="Chave de Licença" required />
-                            <select class="form-control mr-2" v-model="novoSoftware.situacao" required>
-                                <option value="Disponível">Disponível</option>
-                                <option value="Indisponível">Indisponível</option>
-                            </select>
-                            <button type="submit" class="btn btn-success">Adicionar</button>
-                        </form>
-                    </div>
-                    
-                    <h5>Softwares Cadastrados</h5>
-                    <div class="mb-3">
-                        <div v-for="(sw, nome) in resumoSoftwares" :key="nome" class="badge badge-info mr-2 mb-2">
-                            {{ nome }}: {{ sw.total }} <span v-if="sw.disponiveis !== sw.total">({{ sw.disponiveis }}D)</span>
-                        </div>
-                    </div>
-                    
-                    <div v-if="softwares.length === 0" class="alert alert-info">Nenhum software cadastrado.</div>
-                    <div v-else>
-                        <div v-for="(sw, index) in softwares" :key="index" class="software-item">
-                            <div class="software-info">
-                                <strong>{{ sw.nome }}</strong> - {{ sw.chave }} 
-                                <span :class="sw.situacao === 'Disponível' ? 'text-success' : 'text-danger'">
-                                    ({{ sw.situacao }})
-                                </span>
-                                <span class="badge badge-secondary">
-                                    Atribuições: {{ contarAtribuicoesSoftware(sw.nome, sw.chave) }}
-                                </span>
-                            </div>
-                            <div class="software-acoes">
-                                <button v-if="isAdmin" class="btn btn-sm btn-primary mr-1" @click="editarSoftware(index)">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button v-if="isAdmin" class="btn btn-sm btn-danger" @click="removerSoftwareCadastrado(index)">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Abas -->
+                <ul class="nav nav-tabs mb-4">
+                    <li class="nav-item">
+                        <a class="nav-link" :class="{active: abaAtiva==='atribuicao'}" href="#" @click.prevent="abaAtiva='atribuicao'">
+                            <i class="fas fa-laptop-house mr-1"></i> Atribuição
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" :class="{active: abaAtiva==='estoque'}" href="#" @click.prevent="abaAtiva='estoque'">
+                            <i class="fas fa-boxes mr-1"></i> Estoque
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" :class="{active: abaAtiva==='usuarios'}" href="#" @click.prevent="abaAtiva='usuarios'">
+                            <i class="fas fa-users mr-1"></i> Usuários
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" :class="{active: abaAtiva==='softwares'}" href="#" @click.prevent="abaAtiva='softwares'">
+                            <i class="fas fa-copyright mr-1"></i> Softwares
+                        </a>
+                    </li>
+                    <li class="nav-item" v-if="usuarioAtual.perfil === 'Administrador' || usuarioAtual.perfil === 'Supervisor'">
+                        <a class="nav-link" :class="{active: abaAtiva==='relatorio'}" href="#" @click.prevent="abaAtiva='relatorio'">
+                            <i class="fas fa-chart-bar mr-1"></i> Relatório
+                        </a>
+                    </li>
+                </ul>
 
-                <!-- Usuários (SEM CPF) -->
-                <div v-if="abaAtiva==='usuarios'">
-                    <h4>Usuários</h4>
-                    
-                    <!-- Barra de Pesquisa -->
-                    <div class="form-group mb-3">
-                        <div class="input-group">
-                            <input type="text" class="form-control" v-model="filtroUsuario" 
-                                   placeholder="Pesquisar por nome de usuário...">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" @click="filtroUsuario = ''">
-                                    <i class="fas fa-times"></i>
+                <!-- Relatório -->
+                <transition name="fade">
+                    <div v-if="abaAtiva==='relatorio'" class="card mb-4">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0"><i class="fas fa-chart-bar mr-2"></i>Relatório Mensal</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row align-items-center">
+                                <div class="col-md-3 mb-2 mb-md-0">
+                                    <label class="sr-only">Mês</label>
+                                    <select v-model="mesRelatorio" class="form-control">
+                                        <option v-for="m in 12" :value="m">{{ getMonthName(m) }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-2 mb-md-0">
+                                    <label class="sr-only">Ano</label>
+                                    <input type="number" v-model="anoRelatorio" class="form-control" placeholder="Ano" />
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary mr-2" @click="gerarRelatorio()">
+                                        <i class="fas fa-file-csv mr-2"></i> Baixar CSV
+                                    </button>
+                                    <button class="btn btn-info" @click="gerarRelatorioPDF()">
+                                        <i class="fas fa-file-pdf mr-2"></i> Baixar PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+
+                <!-- Atribuição -->
+                <transition name="fade">
+                    <div v-if="abaAtiva==='atribuicao'">
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0"><i class="fas fa-laptop-house mr-2"></i>Atribuir Equipamentos</h5>
+                            </div>
+                            <div class="card-body">
+                                <form @submit.prevent="atribuirEquipamentos">
+                                    <h6 class="font-weight-bold text-primary mb-3">Dados do Usuário</h6>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label>Nome Completo</label>
+                                            <input type="text" class="form-control" v-model="novoUsuario" placeholder="Nome do usuário" required />
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Email</label>
+                                            <input type="email" class="form-control" v-model="novoEmail" placeholder="Email corporativo" />
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Localização/Setor</label>
+                                            <input type="text" class="form-control" v-model="novaLocalizacao" placeholder="Local de trabalho" />
+                                        </div>
+                                    </div>
+                                    
+                                    <h6 class="font-weight-bold text-primary mt-4 mb-3">Equipamentos Disponíveis</h6>
+                                    <div v-for="tipo in tiposEquipamentos" :key="tipo" class="mb-3">
+                                        <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded cursor-pointer" 
+                                             @click="toggleEstoque(tipo)">
+                                            <div>
+                                                <i :class="[iconeTipo(tipo),'mr-2']"></i> 
+                                                <strong>{{tipo}}</strong> - 
+                                                <span class="text-muted">Disponíveis: {{contarDisponiveis(tipo)}}</span>
+                                            </div>
+                                            <i class="fas" :class="estoqueVisivel[tipo] ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                                        </div>
+                                        <div v-if="estoqueVisivel[tipo]" class="mt-2">
+                                            <div class="form-check mb-2" v-for="equip in equipamentosDisponiveis.filter(e=>e.tipo===tipo)"
+                                                :key="equip.patrimonio">
+                                                <input class="form-check-input" type="checkbox" :value="equip.patrimonio"
+                                                    :id="'eq-'+equip.patrimonio" v-model="equipamentosSelecionados" />
+                                                <label class="form-check-label" :for="'eq-'+equip.patrimonio">
+                                                    {{equip.modelo}} ({{equip.patrimonio}})
+                                                </label>
+                                            </div>
+                                            <div v-if="equipamentosDisponiveis.filter(e=>e.tipo===tipo).length === 0" class="alert alert-info py-2">
+                                                Nenhum equipamento disponível deste tipo.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <h6 class="font-weight-bold text-primary mt-4 mb-3">Softwares</h6>
+                                    <div v-for="(soft,i) in softwaresSelecionados" :key="i" class="form-row mb-2 align-items-center">
+                                        <div class="col-md-5">
+                                            <select class="form-control" v-model="soft.nome" @change="selecionarSoftware(i)">
+                                                <option disabled value="">Selecione o software</option>
+                                                <option v-for="sw in softwaresDisponiveis" :value="sw.nome" :disabled="sw.situacao === 'Indisponível'">
+                                                    {{sw.nome}} <span v-if="sw.situacao === 'Indisponível'">(Indisponível)</span>
+                                                </option>
+                                                <option value="Outro">Outro (especificar)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" v-model="soft.chave" placeholder="Chave de acesso" />
+                                            <small v-if="soft.nome === 'Outro'" class="text-muted">Informe o nome do software</small>
+                                        </div>
+                                        <div class="col-md-1 text-center">
+                                            <button type="button" class="btn btn-sm btn-outline-danger" @click="removerSoftware(i)">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-primary btn-sm mb-3"
+                                        @click.prevent="softwaresSelecionados.push({nome:'',chave:''})">
+                                        <i class="fas fa-plus mr-1"></i> Adicionar Software
+                                    </button>
+                                    
+                                    <div class="d-flex justify-content-end mt-4">
+                                        <button class="btn btn-secondary mr-2" type="button" @click="limparFormulario">
+                                            <i class="fas fa-times mr-1"></i> Cancelar
+                                        </button>
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fas fa-save mr-1"></i> Salvar Atribuição
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+
+                <!-- Estoque -->
+                <transition name="fade">
+                    <div v-if="abaAtiva==='estoque'">
+                        <!-- Barra de Busca Avançada -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0"><i class="fas fa-search mr-2"></i>Busca Avançada</h5>
+                                <button class="btn btn-sm btn-outline-primary" @click="toggleBuscaAvancada">
+                                    {{ mostrarBuscaAvancada ? 'Ocultar' : 'Mostrar' }} filtros
                                 </button>
                             </div>
+                            <div class="card-body">
+                                <div class="search-box mb-3">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" class="form-control" v-model="filtroEquipamento" 
+                                           placeholder="Pesquisar por patrimônio, modelo ou tipo...">
+                                </div>
+                                
+                                <transition name="fade">
+                                    <div v-if="mostrarBuscaAvancada" class="advanced-search">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Tipo</label>
+                                                <select class="form-control" v-model="filtrosEstoque.tipo">
+                                                    <option value="">Todos os tipos</option>
+                                                    <option v-for="tipo in tiposEquipamentos" :value="tipo">{{tipo}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>Modelo</label>
+                                                <input type="text" class="form-control" v-model="filtrosEstoque.modelo" 
+                                                       placeholder="Filtrar por modelo">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>Situação</label>
+                                                <select class="form-control" v-model="filtrosEstoque.situacao">
+                                                    <option value="">Todas</option>
+                                                    <option value="Disponível">Disponível</option>
+                                                    <option value="Indisponível">Indisponível</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </transition>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div v-if="atribuicoesFiltradas.length===0" class="alert alert-info">
-                        Nenhuma atribuição encontrada.
-                    </div>
-                    
-                    <div class="usuarios-scroll">
-                        <div v-for="(a,i) in atribuicoesFiltradas" :key="i" class="card-user">
-                            <h5>{{a.usuario}}</h5>
-                            <p><strong>Email:</strong> {{a.email}}</p>
-                            <p><strong>Localização:</strong> {{a.localizacao}}</p>
-                            <p><strong>Equipamentos:</strong></p>
-                            <ul>
-                                <li v-for="e in a.equipamentos" :key="e.patrimonio">{{e.tipo}} – {{e.modelo}} ({{e.patrimonio}})
-                                </li>
-                            </ul>
-                            <p><strong>Softwares:</strong></p>
-                            <ul>
-                                <li v-for="s in a.softwares" :key="s.nome">{{s.nome}} – {{s.chave}}</li>
-                            </ul>
-                            <div class="mt-2">
-                                <button class="btn btn-info btn-sm mr-2" @click="gerarTermoPDF(a)"><i
-                                        class="fas fa-file-pdf"></i> Gerar Termo</button>
-                                <button v-if="isAdmin" class="btn btn-warning btn-sm mr-2" @click="editarUsuario(i)"><i
-                                        class="fas fa-edit"></i> Editar</button>
-                                <button v-if="isAdmin" class="btn btn-danger btn-sm" @click="excluirUsuario(i)"><i class="fas fa-trash"></i>
-                                    Excluir</button>
+                        
+                        <!-- Cadastro de Modelos -->
+                        <div v-if="usuarioAtual.perfil === 'Administrador' || usuarioAtual.perfil === 'Supervisor'" 
+                             class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0"><i class="fas fa-plus-circle mr-2"></i>Cadastrar Novo Modelo</h5>
+                            </div>
+                            <div class="card-body">
+                                <form @submit.prevent="adicionarModelo" class="row g-3">
+                                    <div class="col-md-4">
+                                        <label>Tipo</label>
+                                        <select class="form-control" v-model="novoModelo.tipo" required>
+                                            <option disabled value="">Selecione</option>
+                                            <option>Monitor</option>
+                                            <option>Notebook</option>
+                                            <option>Tablet</option>
+                                            <option>Desktop</option>
+                                            <option value="outro">Outro</option>
+                                        </select>
+                                        <input v-if="novoModelo.tipo === 'outro'" class="form-control mt-2" 
+                                               v-model="novoModelo.novoTipo" placeholder="Especificar tipo" required />
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label>Modelo</label>
+                                        <input class="form-control" v-model="novoModelo.modelo" 
+                                               placeholder="Ex: Dell Optiplex 7080" required />
+                                    </div>
+                                    <div class="col-md-3 d-flex align-items-end">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="fas fa-save mr-1"></i> Salvar Modelo
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Adição de Patrimônios -->
+                        <div v-if="(usuarioAtual.perfil === 'Administrador' || usuarioAtual.perfil === 'Supervisor') && 
+                                     modelosCadastrados.length > 0" 
+                             class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0"><i class="fas fa-barcode mr-2"></i>Adicionar Patrimônios</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label>Selecione o Modelo</label>
+                                        <select class="form-control" v-model="modeloSelecionado" required>
+                                            <option disabled value="">Selecione um modelo</option>
+                                            <option v-for="(modelo, index) in modelosCadastrados" :value="index">
+                                                {{ modelo.tipo }} - {{ modelo.modelo }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <label>Patrimônios (um por linha)</label>
+                                        <textarea class="form-control" v-model="patrimoniosParaAdicionar" 
+                                                  rows="5" placeholder="Digite os números de patrimônio, um em cada linha" required></textarea>
+                                    </div>
+                                    <div class="col-md-4 d-flex align-items-end">
+                                        <button class="btn btn-success w-100" @click="adicionarPatrimonios">
+                                            <i class="fas fa-plus-circle mr-1"></i> Adicionar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lista de Equipamentos -->
+                        <div class="card">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0"><i class="fas fa-boxes mr-2"></i>Lista de Equipamentos</h5>
+                                <span class="badge badge-primary">
+                                    {{ equipamentosFiltrados.length }} itens
+                                </span>
+                            </div>
+                            <div class="card-body p-0">
+                                <div v-for="tipo in tiposEquipamentosFiltrados" :key="tipo">
+                                    <div class="d-flex justify-content-between align-items-center p-3 border-bottom bg-light">
+                                        <div>
+                                            <i :class="[iconeTipo(tipo),'mr-2']"></i>
+                                            <strong>{{tipo}}</strong>
+                                            <span class="text-muted ml-2">
+                                                ({{ equipamentosFiltrados.filter(e => e.tipo === tipo).length }} itens)
+                                            </span>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-secondary" 
+                                                @click="toggleEstoque(tipo)">
+                                            {{ estoqueVisivel[tipo] ? 'Ocultar' : 'Mostrar' }}
+                                        </button>
+                                    </div>
+                                    
+                                    <transition name="fade">
+                                        <div v-if="estoqueVisivel[tipo]">
+                                            <div v-for="modelo in modelosPorTipoFiltrados(tipo)" 
+                                                 :key="modelo.modelo" 
+                                                 class="p-3 border-bottom">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <h6 class="mb-0 font-weight-bold">{{ modelo.modelo }}</h6>
+                                                    <span class="badge" 
+                                                          :class="{'badge-success': contarDisponiveisPorModelo(tipo, modelo.modelo) > 0, 
+                                                                   'badge-danger': contarDisponiveisPorModelo(tipo, modelo.modelo) === 0}">
+                                                        {{ contarDisponiveisPorModelo(tipo, modelo.modelo) }} disponíveis
+                                                    </span>
+                                                </div>
+                                                
+                                                <div class="row">
+                                                    <div v-for="equip in equipamentosFiltrados.filter(e => e.tipo === tipo && e.modelo === modelo.modelo)" 
+                                                         :key="equip.patrimonio" 
+                                                         class="col-md-6 col-lg-4 mb-2">
+                                                        <div class="d-flex justify-content-between align-items-center p-2 bg-white rounded border">
+                                                            <div>
+                                                                <span class="status-badge" 
+                                                                      :class="equip.situacao==='Disponível'?'status-available':'status-unavailable'"></span>
+                                                                {{ equip.patrimonio }}
+                                                            </div>
+                                                            <div>
+                                                                <span class="badge" 
+                                                                      :class="equip.situacao==='Disponível'?'badge-success':'badge-danger'">
+                                                                    {{ equip.situacao }}
+                                                                </span>
+                                                                <button v-if="usuarioAtual.perfil === 'Administrador'" 
+                                                                        class="btn btn-sm btn-outline-danger ml-2" 
+                                                                        @click="removerEquipamento(equip.patrimonio)">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </transition>
+                                </div>
+                                
+                                <div v-if="equipamentosFiltrados.length === 0" class="p-4 text-center">
+                                    <i class="fas fa-box-open fa-2x text-muted mb-3"></i>
+                                    <p class="text-muted">Nenhum equipamento encontrado com os filtros aplicados.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </transition>
+
+                <!-- Softwares -->
+                <transition name="fade">
+                    <div v-if="abaAtiva==='softwares'">
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0"><i class="fas fa-copyright mr-2"></i>Gerenciar Softwares</h5>
+                            </div>
+                            <div class="card-body">
+                                <div v-if="usuarioAtual.perfil === 'Administrador' || usuarioAtual.perfil === 'Supervisor'" 
+                                     class="mb-4 p-3 bg-light rounded">
+                                    <h6 class="font-weight-bold text-primary mb-3">Adicionar Software</h6>
+                                    <form @submit.prevent="adicionarSoftware" class="row g-3">
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" v-model="novoSoftware.nome" 
+                                                   placeholder="Nome do Software" required />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" v-model="novoSoftware.chave" 
+                                                   placeholder="Chave de Licença" required />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-control" v-model="novoSoftware.situacao" required>
+                                                <option value="Disponível">Disponível</option>
+                                                <option value="Indisponível">Indisponível</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button type="submit" class="btn btn-success w-100">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                                <h6 class="font-weight-bold text-primary mb-3">Resumo de Softwares</h6>
+                                <div class="mb-4">
+                                    <div v-for="(sw, nome) in resumoSoftwares" :key="nome" 
+                                         class="badge badge-info mr-2 mb-2 d-inline-flex align-items-center">
+                                        {{ nome }}: {{ sw.total }} 
+                                        <span v-if="sw.disponiveis !== sw.total" class="ml-1">
+                                            ({{ sw.disponiveis }}D)
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <h6 class="font-weight-bold text-primary mb-3">Lista Completa</h6>
+                                <div v-if="softwares.length === 0" class="alert alert-info">
+                                    <i class="fas fa-info-circle mr-2"></i> Nenhum software cadastrado.
+                                </div>
+                                <div v-else>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Software</th>
+                                                    <th>Licença</th>
+                                                    <th>Status</th>
+                                                    <th>Atribuições</th>
+                                                    <th v-if="usuarioAtual.perfil === 'Administrador' || usuarioAtual.perfil === 'Supervisor'">Ações</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(sw, index) in softwares" :key="index">
+                                                    <td>{{ sw.nome }}</td>
+                                                    <td><code>{{ sw.chave }}</code></td>
+                                                    <td>
+                                                        <span class="badge" 
+                                                              :class="sw.situacao === 'Disponível' ? 'badge-success' : 'badge-danger'">
+                                                            {{ sw.situacao }}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        {{ contarAtribuicoesSoftware(sw.nome, sw.chave) }}
+                                                    </td>
+                                                    <td v-if="usuarioAtual.perfil === 'Administrador' || usuarioAtual.perfil === 'Supervisor'">
+                                                        <button class="btn btn-sm btn-primary mr-1" 
+                                                                @click="editarSoftware(index)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger" 
+                                                                @click="removerSoftwareCadastrado(index)">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+
+                <!-- Usuários -->
+                <transition name="fade">
+                    <div v-if="abaAtiva==='usuarios'">
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0"><i class="fas fa-users mr-2"></i>Usuários</h5>
+                            </div>
+                            <div class="card-body">
+                                <!-- Barra de Pesquisa -->
+                                <div class="search-box mb-4">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" class="form-control" v-model="filtroUsuario" 
+                                           placeholder="Pesquisar por nome de usuário, email ou localização...">
+                                </div>
+                                
+                                <div v-if="atribuicoesFiltradas.length===0" class="alert alert-info">
+                                    <i class="fas fa-info-circle mr-2"></i> Nenhuma atribuição encontrada.
+                                </div>
+                                
+                                <div class="row">
+                                    <div v-for="(a,i) in atribuicoesFiltradas" :key="i" class="col-md-6 col-lg-4 mb-4">
+                                        <div class="card h-100 user-card">
+                                            <div class="card-header bg-white">
+                                                <h5 class="mb-0">{{a.usuario}}</h5>
+                                                <small class="text-muted">{{a.localizacao}}</small>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="mb-2">
+                                                    <i class="fas fa-envelope mr-2 text-muted"></i>
+                                                    <a :href="'mailto:'+a.email">{{a.email || 'Não informado'}}</a>
+                                                </p>
+                                                <p class="mb-3">
+                                                    <i class="fas fa-calendar-alt mr-2 text-muted"></i>
+                                                    {{ formatarData(a.data) }}
+                                                </p>
+                                                
+                                                <div class="mb-3">
+                                                    <h6 class="font-weight-bold text-primary">
+                                                        <i class="fas fa-laptop mr-2"></i>Equipamentos ({{a.equipamentos.length}})
+                                                    </h6>
+                                                    <ul class="list-unstyled mb-0">
+                                                        <li v-for="e in a.equipamentos" :key="e.patrimonio" class="mb-1">
+                                                            <i :class="[iconeTipo(e.tipo), 'mr-2']"></i>
+                                                            {{e.modelo}} <small class="text-muted">({{e.patrimonio}})</small>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                
+                                                <div v-if="a.softwares.length > 0">
+                                                    <h6 class="font-weight-bold text-primary">
+                                                        <i class="fas fa-copyright mr-2"></i>Softwares ({{a.softwares.length}})
+                                                    </h6>
+                                                    <ul class="list-unstyled mb-0">
+                                                        <li v-for="s in a.softwares" :key="s.nome" class="mb-1">
+                                                            <i class="fas fa-key mr-2"></i>
+                                                            {{s.nome}} <small class="text-muted">({{s.chave}})</small>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer bg-white">
+                                                <div class="d-flex justify-content-between">
+                                                    <button class="btn btn-sm btn-info" @click="gerarTermoPDF(a)">
+                                                        <i class="fas fa-file-pdf mr-1"></i> Termo
+                                                    </button>
+                                                    <div v-if="usuarioAtual.perfil === 'Administrador'">
+                                                        <button class="btn btn-sm btn-warning mr-1" @click="editarUsuario(i)">
+                                                            <i class="fas fa-edit mr-1"></i> Editar
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger" @click="excluirUsuario(i)">
+                                                            <i class="fas fa-trash mr-1"></i> Excluir
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
             </div>
         </div>
     </div>
@@ -560,29 +890,40 @@
             el: '#app',
             data: {
                 usuarioLogado: false,
-                isAdmin: false,
+                usuarioAtual: {
+                    nome: '',
+                    perfil: ''
+                },
                 login: {
                     usuario: '',
                     senha: ''
                 },
                 mensagemErro: '',
                 abaAtiva: 'atribuicao',
-                novoUsuario: '', novoEmail: '', novaLocalizacao: '',
-                equipamentosSelecionados: [], softwaresSelecionados: [{ nome: '', chave: '' }],
-                estoqueVisivel: {}, 
-                novoEquipamento: { 
-                    tipo: '', 
-                    modelo: '', 
-                    patrimonio: '',
-                    novoTipo: '' 
+                novoUsuario: '', 
+                novoEmail: '', 
+                novaLocalizacao: '',
+                equipamentosSelecionados: [], 
+                softwaresSelecionados: [{ nome: '', chave: '' }],
+                estoqueVisivel: {},
+                mostrarBuscaAvancada: false,
+                filtroEquipamento: '',
+                filtrosEstoque: {
+                    tipo: '',
+                    modelo: '',
+                    situacao: ''
                 },
-                novoSoftware: { nome: '', chave: '', situacao: 'Disponível' },
-                equipamentos: [], atribuicoes: [], softwares: [],
-                mesRelatorio: new Date().getMonth() + 1, anoRelatorio: new Date().getFullYear(),
-                adminCredentials: {
-                    usuario: 'admin',
-                    senha: 'admin123'
+                filtroUsuario: '',
+                novoSoftware: { 
+                    nome: '', 
+                    chave: '', 
+                    situacao: 'Disponível' 
                 },
+                equipamentos: [], 
+                atribuicoes: [], 
+                softwares: [],
+                mesRelatorio: new Date().getMonth() + 1, 
+                anoRelatorio: new Date().getFullYear(),
                 novoModelo: {
                     tipo: '',
                     modelo: '',
@@ -591,73 +932,125 @@
                 modelosCadastrados: [],
                 modeloSelecionado: null,
                 patrimoniosParaAdicionar: '',
-                filtroUsuario: ''
+                
+                // Configuração de usuários e permissões
+                usuariosCadastrados: [
+                    {
+                        usuario: 'admin',
+                        senha: 'admin123',
+                        nome: 'Administrador',
+                        perfil: 'Administrador',
+                        email: 'admin@stcp.com'
+                    },
+                    {
+                        usuario: 'supervisor',
+                        senha: 'sup123',
+                        nome: 'Supervisor TI',
+                        perfil: 'Supervisor',
+                        email: 'ti@stcp.com'
+                    },
+                    {
+                        usuario: 'usuario',
+                        senha: 'user123',
+                        nome: 'Usuário Padrão',
+                        perfil: 'Usuário',
+                        email: 'user@stcp.com'
+                    }
+                ]
             },
             mounted() {
-                const s = localStorage.getItem('sistema');
-                if (s) { 
-                    const st = JSON.parse(s); 
-                    this.equipamentos = st.equipamentos || []; 
-                    this.atribuicoes = st.atribuicoes || []; 
-                    this.softwares = st.softwares || [];
-                    this.modelosCadastrados = st.modelosCadastrados || this.extrairModelosUnicos(st.equipamentos || []);
-                }
-                else { 
-                    this.equipamentos = [
-                        { tipo: 'Monitor', modelo: 'Samsung 24"', patrimonio: 'M-S24-001', situacao: 'Disponível' },
-                        { tipo: 'Monitor', modelo: 'Samsung 24"', patrimonio: 'M-S24-002', situacao: 'Disponível' },
-                        { tipo: 'Notebook', modelo: 'Lenovo i5', patrimonio: 'N-L13-001', situacao: 'Disponível' },
-                        { tipo: 'Notebook', modelo: 'Lenovo i5', patrimonio: 'N-L13-002', situacao: 'Disponível' }
-                    ];
-                    this.softwares = [
-                        { nome: 'AutoCAD Collection', chave: 'AC-2023-XXXX', situacao: 'Disponível' },
-                        { nome: 'GstarCAD', chave: 'GS-2023-YYYY', situacao: 'Disponível' },
-                        { nome: 'CypeCAD', chave: 'CC-2023-ZZZZ', situacao: 'Disponível' }
-                    ];
-                    this.modelosCadastrados = this.extrairModelosUnicos(this.equipamentos);
-                }
+                this.carregarDados();
                 
+                // Verificar se está logado
                 const loggedIn = localStorage.getItem('loggedIn');
                 if (loggedIn) {
                     this.usuarioLogado = true;
-                    this.isAdmin = localStorage.getItem('isAdmin') === 'true';
+                    const userData = JSON.parse(localStorage.getItem('userData'));
+                    this.usuarioAtual = userData;
                 }
             },
             watch: {
                 equipamentos: { 
                     handler: function(newVal) {
-                        this.save();
+                        this.salvarDados();
                         this.modelosCadastrados = this.extrairModelosUnicos(newVal);
                     }, 
                     deep: true 
                 }, 
-                atribuicoes: { handler: 'save', deep: true },
-                softwares: { handler: 'save', deep: true },
-                modelosCadastrados: { handler: 'save', deep: true }
+                atribuicoes: { handler: 'salvarDados', deep: true },
+                softwares: { handler: 'salvarDados', deep: true },
+                modelosCadastrados: { handler: 'salvarDados', deep: true }
             },
             computed: {
-                equipamentosDisponiveis() { return this.equipamentos.filter(e => e.situacao === 'Disponível') },
-                softwaresDisponiveis() { return this.softwares },
-                totalSoftwaresDisponiveis() { return this.softwares.filter(s => s.situacao === 'Disponível').length },
-                totalSoftwaresIndisponiveis() { return this.softwares.filter(s => s.situacao === 'Indisponível').length },
-                tiposEquipamentos() { return [...new Set(this.equipamentos.map(e => e.tipo))] },
-                totaisDispositivos() { return this.tiposEquipamentos.map(tipo => { 
-                    const total = this.equipamentos.filter(e => e.tipo === tipo).length; 
-                    const dispon = this.contarDisponiveis(tipo); 
-                    return { 
-                        tipo, 
-                        icone: this.iconeTipo(tipo), 
-                        total, 
-                        disponiveis: dispon, 
-                        indisponiveis: total - dispon 
-                    } 
-                }) },
+                equipamentosDisponiveis() { 
+                    return this.equipamentos.filter(e => e.situacao === 'Disponível') 
+                },
+                softwaresDisponiveis() { 
+                    return this.softwares 
+                },
+                totalSoftwaresDisponiveis() { 
+                    return this.softwares.filter(s => s.situacao === 'Disponível').length 
+                },
+                totalSoftwaresIndisponiveis() { 
+                    return this.softwares.filter(s => s.situacao === 'Indisponível').length 
+                },
+                tiposEquipamentos() { 
+                    return [...new Set(this.equipamentos.map(e => e.tipo))] 
+                },
+                tiposEquipamentosFiltrados() {
+                    const tipos = [...new Set(this.equipamentosFiltrados.map(e => e.tipo))];
+                    return tipos.sort();
+                },
+                totaisDispositivos() { 
+                    return this.tiposEquipamentos.map(tipo => { 
+                        const total = this.equipamentos.filter(e => e.tipo === tipo).length; 
+                        const dispon = this.contarDisponiveis(tipo); 
+                        return { 
+                            tipo, 
+                            icone: this.iconeTipo(tipo), 
+                            total, 
+                            disponiveis: dispon, 
+                            indisponiveis: total - dispon 
+                        } 
+                    }) 
+                },
                 atribuicoesFiltradas() {
                     if (!this.filtroUsuario) return this.atribuicoes;
                     const termo = this.filtroUsuario.toLowerCase();
                     return this.atribuicoes.filter(a => 
-                        a.usuario.toLowerCase().includes(termo)
+                        a.usuario.toLowerCase().includes(termo) ||
+                        (a.email && a.email.toLowerCase().includes(termo)) ||
+                        (a.localizacao && a.localizacao.toLowerCase().includes(termo))
                     );
+                },
+                equipamentosFiltrados() {
+                    let filtrados = [...this.equipamentos];
+                    
+                    // Filtro por texto (patrimônio, modelo ou tipo)
+                    if (this.filtroEquipamento) {
+                        const termo = this.filtroEquipamento.toLowerCase();
+                        filtrados = filtrados.filter(e => 
+                            e.patrimonio.toLowerCase().includes(termo) ||
+                            e.modelo.toLowerCase().includes(termo) ||
+                            e.tipo.toLowerCase().includes(termo)
+                        );
+                    }
+                    
+                    // Filtros avançados
+                    if (this.filtrosEstoque.tipo) {
+                        filtrados = filtrados.filter(e => e.tipo === this.filtrosEstoque.tipo);
+                    }
+                    
+                    if (this.filtrosEstoque.modelo) {
+                        const termo = this.filtrosEstoque.modelo.toLowerCase();
+                        filtrados = filtrados.filter(e => e.modelo.toLowerCase().includes(termo));
+                    }
+                    
+                    if (this.filtrosEstoque.situacao) {
+                        filtrados = filtrados.filter(e => e.situacao === this.filtrosEstoque.situacao);
+                    }
+                    
+                    return filtrados.sort((a, b) => a.tipo.localeCompare(b.tipo) || a.modelo.localeCompare(b.modelo));
                 },
                 resumoSoftwares() {
                     const resumo = {};
@@ -677,10 +1070,126 @@
                 }
             },
             methods: {
-                contarAtribuicoesSoftware(nome, chave) {
-                    return this.atribuicoes.reduce((total, atribuicao) => {
-                        return total + atribuicao.softwares.filter(s => s.nome === nome && s.chave === chave).length;
-                    }, 0);
+                carregarDados() {
+                    const dados = localStorage.getItem('sistema');
+                    if (dados) { 
+                        const parsed = JSON.parse(dados); 
+                        this.equipamentos = parsed.equipamentos || []; 
+                        this.atribuicoes = parsed.atribuicoes || []; 
+                        this.softwares = parsed.softwares || [];
+                        this.modelosCadastrados = parsed.modelosCadastrados || this.extrairModelosUnicos(parsed.equipamentos || []);
+                    } else { 
+                        // Dados iniciais
+                        this.equipamentos = [
+                            { tipo: 'Monitor', modelo: 'Samsung 24"', patrimonio: 'M-S24-001', situacao: 'Disponível' },
+                            { tipo: 'Monitor', modelo: 'Samsung 24"', patrimonio: 'M-S24-002', situacao: 'Disponível' },
+                            { tipo: 'Notebook', modelo: 'Lenovo ThinkPad E15', patrimonio: 'N-LTP-001', situacao: 'Disponível' },
+                            { tipo: 'Notebook', modelo: 'Dell Latitude 5420', patrimonio: 'N-DL5-001', situacao: 'Disponível' },
+                            { tipo: 'Desktop', modelo: 'Dell Optiplex 7080', patrimonio: 'D-DO7-001', situacao: 'Disponível' }
+                        ];
+                        this.softwares = [
+                            { nome: 'AutoCAD Collection', chave: 'AC-2023-XXXX', situacao: 'Disponível' },
+                            { nome: 'GstarCAD', chave: 'GS-2023-YYYY', situacao: 'Disponível' },
+                            { nome: 'CypeCAD', chave: 'CC-2023-ZZZZ', situacao: 'Disponível' },
+                            { nome: 'Microsoft Office', chave: 'M365-XXXX-YYYY', situacao: 'Disponível' }
+                        ];
+                        this.modelosCadastrados = this.extrairModelosUnicos(this.equipamentos);
+                        this.salvarDados();
+                    }
+                },
+                salvarDados() { 
+                    localStorage.setItem('sistema', JSON.stringify({ 
+                        equipamentos: this.equipamentos, 
+                        atribuicoes: this.atribuicoes,
+                        softwares: this.softwares,
+                        modelosCadastrados: this.modelosCadastrados
+                    })); 
+                },
+                fazerLogin() {
+                    const usuario = this.usuariosCadastrados.find(u => 
+                        u.usuario === this.login.usuario && u.senha === this.login.senha
+                    );
+                    
+                    if (usuario) {
+                        this.usuarioLogado = true;
+                        this.usuarioAtual = {
+                            nome: usuario.nome,
+                            perfil: usuario.perfil,
+                            email: usuario.email
+                        };
+                        this.mensagemErro = '';
+                        
+                        // Salvar dados de login
+                        localStorage.setItem('loggedIn', 'true');
+                        localStorage.setItem('userData', JSON.stringify(this.usuarioAtual));
+                        
+                        // Redirecionar para a aba apropriada baseada no perfil
+                        if (usuario.perfil === 'Visitante') {
+                            this.abaAtiva = 'estoque';
+                        }
+                    } else {
+                        this.mensagemErro = 'Usuário ou senha incorretos';
+                    }
+                },
+                entrarComoVisitante() {
+                    this.usuarioLogado = true;
+                    this.usuarioAtual = {
+                        nome: 'Visitante',
+                        perfil: 'Visitante'
+                    };
+                    localStorage.setItem('loggedIn', 'true');
+                    localStorage.setItem('userData', JSON.stringify(this.usuarioAtual));
+                    this.abaAtiva = 'estoque';
+                },
+                sair() {
+                    this.usuarioLogado = false;
+                    this.usuarioAtual = {
+                        nome: '',
+                        perfil: ''
+                    };
+                    localStorage.removeItem('loggedIn');
+                    localStorage.removeItem('userData');
+                    this.login.usuario = '';
+                    this.login.senha = '';
+                },
+                toggleBuscaAvancada() {
+                    this.mostrarBuscaAvancada = !this.mostrarBuscaAvancada;
+                },
+                toggleEstoque(tipo) { 
+                    this.$set(this.estoqueVisivel, tipo, !this.estoqueVisivel[tipo]) 
+                },
+                iconeTipo(t) { 
+                    const icons = {
+                        'Desktop': 'fas fa-desktop',
+                        'Notebook': 'fas fa-laptop',
+                        'Tablet': 'fas fa-tablet-alt',
+                        'Monitor': 'fas fa-tv',
+                        'Impressora': 'fas fa-print',
+                        'Scanner': 'fas fa-scanner',
+                        'Servidor': 'fas fa-server'
+                    };
+                    return icons[t] || 'fas fa-box';
+                },
+                contarDisponiveis(tipo) { 
+                    return this.equipamentos.filter(e => e.tipo === tipo && e.situacao === 'Disponível').length 
+                },
+                contarDisponiveisPorModelo(tipo, modelo) {
+                    return this.equipamentos.filter(e => 
+                        e.tipo === tipo && 
+                        e.modelo === modelo && 
+                        e.situacao === 'Disponível'
+                    ).length;
+                },
+                modelosPorTipo(tipo) {
+                    return this.modelosCadastrados.filter(m => m.tipo === tipo);
+                },
+                modelosPorTipoFiltrados(tipo) {
+                    const modelos = [...new Set(
+                        this.equipamentosFiltrados
+                            .filter(e => e.tipo === tipo)
+                            .map(e => ({ tipo: e.tipo, modelo: e.modelo }))
+                    )];
+                    return modelos.sort((a, b) => a.modelo.localeCompare(b.modelo));
                 },
                 extrairModelosUnicos(equipamentos) {
                     const modelos = {};
@@ -695,8 +1204,69 @@
                     });
                     return Object.values(modelos);
                 },
-                modelosPorTipo(tipo) {
-                    return this.modelosCadastrados.filter(m => m.tipo === tipo);
+                limparFormulario() {
+                    this.novoUsuario = '';
+                    this.novoEmail = '';
+                    this.novaLocalizacao = '';
+                    this.equipamentosSelecionados = [];
+                    this.softwaresSelecionados = [{ nome: '', chave: '' }];
+                },
+                removerSoftware(i) { 
+                    this.softwaresSelecionados.splice(i, 1) 
+                },
+                selecionarSoftware(index) {
+                    const nomeSoftware = this.softwaresSelecionados[index].nome;
+                    
+                    if (nomeSoftware === 'Outro') {
+                        this.softwaresSelecionados[index].chave = '';
+                        return;
+                    }
+                    
+                    const software = this.softwares.find(s => 
+                        s.nome === nomeSoftware && 
+                        s.situacao === 'Disponível'
+                    );
+                    
+                    if (software) {
+                        this.softwaresSelecionados[index].chave = software.chave;
+                        software.situacao = 'Indisponível';
+                    }
+                },
+                atribuirEquipamentos() {
+                    if (!this.novoUsuario || !this.equipamentosSelecionados.length) { 
+                        alert('Informe o nome do usuário e selecione pelo menos um equipamento.'); 
+                        return;
+                    }
+                    
+                    // Validar softwares
+                    const softwaresValidos = this.softwaresSelecionados.filter(s => s.nome && s.chave);
+                    
+                    // Criar atribuição
+                    const atrib = {
+                        usuario: this.novoUsuario,
+                        email: this.novoEmail, 
+                        localizacao: this.novaLocalizacao,
+                        equipamentos: this.equipamentos.filter(e => this.equipamentosSelecionados.includes(e.patrimonio)),
+                        softwares: softwaresValidos,
+                        data: new Date().toISOString()
+                    };
+                    
+                    // Atualizar status dos equipamentos
+                    this.equipamentos = this.equipamentos.map(e => 
+                        this.equipamentosSelecionados.includes(e.patrimonio) ? { ...e, situacao: 'Indisponível' } : e
+                    );
+                    
+                    // Adicionar à lista de atribuições
+                    this.atribuicoes.push(atrib);
+                    
+                    // Limpar formulário
+                    this.limparFormulario();
+                    
+                    // Mostrar mensagem de sucesso
+                    alert('Atribuição registrada com sucesso!');
+                    
+                    // Ir para a aba de usuários
+                    this.abaAtiva = 'usuarios';
                 },
                 adicionarModelo() {
                     const tipo = this.novoModelo.tipo === 'outro' 
@@ -709,7 +1279,8 @@
                     };
                     
                     const modeloExistente = this.modelosCadastrados.find(m => 
-                        m.tipo === novoModelo.tipo && m.modelo === novoModelo.modelo
+                        m.tipo === novoModelo.tipo && 
+                        m.modelo === novoModelo.modelo
                     );
                     
                     if (!modeloExistente) {
@@ -756,6 +1327,7 @@
                     });
                     
                     this.patrimoniosParaAdicionar = '';
+                    this.modeloSelecionado = null;
                     
                     let mensagem = `${adicionados} patrimônios adicionados com sucesso para o modelo ${modelo.modelo}.`;
                     if (duplicados > 0) {
@@ -763,83 +1335,6 @@
                     }
                     
                     alert(mensagem);
-                },
-                fazerLogin() {
-                    if (this.login.usuario === this.adminCredentials.usuario && 
-                        this.login.senha === this.adminCredentials.senha) {
-                        this.usuarioLogado = true;
-                        this.isAdmin = true;
-                        this.mensagemErro = '';
-                        localStorage.setItem('loggedIn', 'true');
-                        localStorage.setItem('isAdmin', 'true');
-                    } else {
-                        this.mensagemErro = 'Usuário ou senha incorretos';
-                    }
-                },
-                entrarComoVisitante() {
-                    this.usuarioLogado = true;
-                    this.isAdmin = false;
-                    localStorage.setItem('loggedIn', 'true');
-                    localStorage.setItem('isAdmin', 'false');
-                },
-                sair() {
-                    this.usuarioLogado = false;
-                    this.isAdmin = false;
-                    localStorage.removeItem('loggedIn');
-                    localStorage.removeItem('isAdmin');
-                    this.login.usuario = '';
-                    this.login.senha = '';
-                },
-                save() { 
-                    localStorage.setItem('sistema', JSON.stringify({ 
-                        equipamentos: this.equipamentos, 
-                        atribuicoes: this.atribuicoes,
-                        softwares: this.softwares,
-                        modelosCadastrados: this.modelosCadastrados
-                    })); 
-                },
-                toggleEstoque(tipo) { this.$set(this.estoqueVisivel, tipo, !this.estoqueVisivel[tipo]) },
-                iconeTipo(t) { 
-                    if (t === 'Desktop') return 'fas fa-server'; 
-                    if (t === 'Notebook') return 'fas fa-laptop'; 
-                    if (t === 'Tablet') return 'fas fa-tablet-alt'; 
-                    if (t === 'Monitor') return 'fas fa-tv'; 
-                    return 'fas fa-box' 
-                },
-                contarDisponiveis(tipo) { return this.equipamentos.filter(e => e.tipo === tipo && e.situacao === 'Disponível').length },
-                removerSoftware(i) { this.softwaresSelecionados.splice(i, 1) },
-                selecionarSoftware(index) {
-                    const nomeSoftware = this.softwaresSelecionados[index].nome;
-                    const software = this.softwares.find(s => s.nome === nomeSoftware && s.situacao === 'Disponível');
-                    if (software) {
-                        this.softwaresSelecionados[index].chave = software.chave;
-                        software.situacao = 'Indisponível';
-                    }
-                },
-                atribuirEquipamentos() {
-                    if (!this.novoUsuario || !this.equipamentosSelecionados.length) { 
-                        alert('Informe nome e selecione pelo menos um equipamento.'); 
-                        return 
-                    }
-                    
-                    const atrib = {
-                        usuario: this.novoUsuario,
-                        email: this.novoEmail, 
-                        localizacao: this.novaLocalizacao,
-                        equipamentos: this.equipamentos.filter(e => this.equipamentosSelecionados.includes(e.patrimonio)),
-                        softwares: [...this.softwaresSelecionados.filter(s => s.nome && s.chave)], 
-                        data: new Date().toISOString()
-                    };
-                    
-                    this.equipamentos = this.equipamentos.map(e => 
-                        this.equipamentosSelecionados.includes(e.patrimonio) ? { ...e, situacao: 'Indisponível' } : e
-                    );
-                    
-                    this.atribuicoes.push(atrib);
-                    this.novoUsuario = this.novoEmail = this.novaLocalizacao = ''; 
-                    this.equipamentosSelecionados = []; 
-                    this.softwaresSelecionados = [{ nome: '', chave: '' }]; 
-                    alert('Atribuição salva com sucesso.');
                 },
                 removerEquipamento(p) { 
                     if (confirm('Tem certeza que deseja remover este equipamento?')) {
@@ -880,63 +1375,190 @@
                     this.novoSoftware = { ...sw };
                     this.softwares.splice(index, 1);
                 },
+                contarAtribuicoesSoftware(nome, chave) {
+                    return this.atribuicoes.reduce((total, atribuicao) => {
+                        return total + atribuicao.softwares.filter(s => 
+                            s.nome === nome && 
+                            s.chave === chave
+                        ).length;
+                    }, 0);
+                },
                 excluirUsuario(i) { 
-                    if (confirm("Excluir essa atribuição?")) { 
+                    if (confirm("Tem certeza que deseja excluir esta atribuição?")) { 
                         const a = this.atribuicoes[i]; 
+                        
+                        // Liberar equipamentos
                         a.equipamentos.forEach(eq => { 
                             const e = this.equipamentos.find(x => x.patrimonio === eq.patrimonio); 
-                            if (e) e.situacao = 'Disponível' 
+                            if (e) e.situacao = 'Disponível';
                         }); 
+                        
+                        // Liberar softwares
                         a.softwares.forEach(sw => {
-                            const s = this.softwares.find(x => x.nome === sw.nome && x.chave === sw.chave);
+                            const s = this.softwares.find(x => 
+                                x.nome === sw.nome && 
+                                x.chave === sw.chave
+                            );
                             if (s) s.situacao = 'Disponível';
                         });
+                        
+                        // Remover atribuição
                         this.atribuicoes.splice(i, 1); 
                     } 
                 },
                 editarUsuario(i) { 
                     const a = this.atribuicoes[i]; 
+                    
+                    // Preencher formulário
                     this.novoUsuario = a.usuario; 
                     this.novoEmail = a.email; 
                     this.novaLocalizacao = a.localizacao; 
                     this.equipamentosSelecionados = a.equipamentos.map(e => e.patrimonio); 
                     this.softwaresSelecionados = JSON.parse(JSON.stringify(a.softwares)); 
+                    
+                    // Liberar recursos
                     a.equipamentos.forEach(eq => { 
                         const e = this.equipamentos.find(x => x.patrimonio === eq.patrimonio); 
-                        if (e) e.situacao = 'Disponível' 
+                        if (e) e.situacao = 'Disponível';
                     });
+                    
                     a.softwares.forEach(sw => {
-                        const s = this.softwares.find(x => x.nome === sw.nome && x.chave === sw.chave);
+                        const s = this.softwares.find(x => 
+                            x.nome === sw.nome && 
+                            x.chave === sw.chave
+                        );
                         if (s) s.situacao = 'Disponível';
                     });
+                    
+                    // Remover atribuição original
                     this.atribuicoes.splice(i, 1); 
-                    this.abaAtiva = 'atribuicao' 
+                    
+                    // Ir para a aba de atribuição
+                    this.abaAtiva = 'atribuicao';
+                    
+                    // Scroll para o topo
+                    window.scrollTo(0, 0);
+                },
+                formatarData(dataString) {
+                    const data = new Date(dataString);
+                    return data.toLocaleDateString('pt-BR');
+                },
+                getMonthName(month) {
+                    const months = [
+                        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                    ];
+                    return months[month - 1];
                 },
                 gerarRelatorio() {
                     const rows = this.atribuicoes.filter(a => { 
                         const d = new Date(a.data); 
-                        return d.getMonth() + 1 === this.mesRelatorio && d.getFullYear() === this.anoRelatorio 
+                        return d.getMonth() + 1 === this.mesRelatorio && 
+                               d.getFullYear() === this.anoRelatorio;
                     }).map(a => [
-                        a.data, 
+                        this.formatarData(a.data), 
                         a.usuario, 
-                        a.email, 
-                        a.localizacao, 
+                        a.email || 'Não informado', 
+                        a.localizacao || 'Não informado', 
                         a.equipamentos.length, 
                         a.softwares.length
                     ]);
                     
-                    const header = ['Data', 'Usuário', 'Email', 'Localização', '# Equip', 'Softwares'];
+                    const header = ['Data', 'Usuário', 'Email', 'Localização', 'Equipamentos', 'Softwares'];
                     const csv = [header, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\r\n');
-                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); 
+                    const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' }); 
                     const fname = `relatorio-${this.anoRelatorio}-${String(this.mesRelatorio).padStart(2, '0')}.csv`;
-                    if (navigator.msSaveBlob) navigator.msSaveBlob(blob, fname); 
-                    else { 
+                    
+                    if (navigator.msSaveBlob) {
+                        navigator.msSaveBlob(blob, fname);
+                    } else { 
                         const link = document.createElement('a'); 
                         link.href = URL.createObjectURL(blob); 
                         link.download = fname; 
+                        document.body.appendChild(link);
                         link.click(); 
+                        document.body.removeChild(link);
                         URL.revokeObjectURL(link.href); 
                     }
+                },
+                gerarRelatorioPDF() {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+                    
+                    // Cabeçalho
+                    doc.setFontSize(16);
+                    doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(44, 62, 80); // Cor primária
+                    doc.text('STCP ENGENHARIA', 105, 15, { align: 'center' });
+                    
+                    doc.setFontSize(14);
+                    doc.text('RELATÓRIO DE ATRIBUIÇÕES', 105, 25, { align: 'center' });
+                    
+                    doc.setFontSize(10);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text(`Período: ${this.getMonthName(this.mesRelatorio)}/${this.anoRelatorio}`, 105, 32, { align: 'center' });
+                    
+                    // Linha divisória
+                    doc.setDrawColor(200, 200, 200);
+                    doc.line(15, 38, 195, 38);
+                    
+                    // Dados
+                    const dados = this.atribuicoes
+                        .filter(a => { 
+                            const d = new Date(a.data); 
+                            return d.getMonth() + 1 === this.mesRelatorio && 
+                                   d.getFullYear() === this.anoRelatorio;
+                        })
+                        .map(a => [
+                            this.formatarData(a.data),
+                            a.usuario,
+                            a.email || '-',
+                            a.localizacao || '-',
+                            a.equipamentos.length,
+                            a.softwares.length
+                        ]);
+                    
+                    // Configuração da tabela
+                    doc.autoTable({
+                        startY: 45,
+                        head: [['Data', 'Usuário', 'Email', 'Localização', 'Equip.', 'Soft.']],
+                        body: dados,
+                        theme: 'grid',
+                        headStyles: {
+                            fillColor: [44, 62, 80], // Cor primária
+                            textColor: 255,
+                            fontStyle: 'bold'
+                        },
+                        alternateRowStyles: {
+                            fillColor: [245, 247, 250] // Cor de fundo
+                        },
+                        margin: { top: 10 },
+                        styles: {
+                            fontSize: 9,
+                            cellPadding: 3,
+                            overflow: 'linebreak'
+                        },
+                        columnStyles: {
+                            0: { cellWidth: 20 },
+                            1: { cellWidth: 40 },
+                            2: { cellWidth: 45 },
+                            3: { cellWidth: 40 },
+                            4: { cellWidth: 15 },
+                            5: { cellWidth: 15 }
+                        }
+                    });
+                    
+                    // Rodapé
+                    const pageCount = doc.internal.getNumberOfPages();
+                    for(let i = 1; i <= pageCount; i++) {
+                        doc.setPage(i);
+                        doc.setFontSize(10);
+                        doc.setTextColor(150);
+                        doc.text(`Página ${i} de ${pageCount}`, 105, 285, { align: 'center' });
+                        doc.text(new Date().toLocaleDateString('pt-BR'), 195, 285, { align: 'right' });
+                    }
+                    
+                    doc.save(`relatorio_${this.mesRelatorio}_${this.anoRelatorio}.pdf`);
                 },
                 gerarTermoPDF(a) {
                     const { jsPDF } = window.jspdf;
@@ -946,8 +1568,10 @@
                     const lineHeight = 7;
                     let y = margin;
                     
+                    // Cabeçalho
                     doc.setFontSize(16);
                     doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(44, 62, 80); // Cor primária
                     doc.text('STCP ENGENHARIA', 105, y, { align: 'center' });
                     y += lineHeight;
                     
@@ -955,18 +1579,22 @@
                     doc.text('TERMO DE RESPONSABILIDADE', 105, y, { align: 'center' });
                     y += lineHeight * 2;
                     
+                    // Corpo do documento
                     doc.setFontSize(12);
                     doc.setFont('helvetica', 'normal');
+                    doc.setTextColor(0, 0, 0);
                     
-                    const dataFormatada = new Date(a.data).toLocaleDateString('pt-BR');
+                    const dataFormatada = this.formatarData(a.data);
                     
-                    doc.text(`Eu, ${a.usuario}, lotado(a) em ${a.localizacao},`, margin, y);
+                    // Texto introdutório
+                    doc.text(`Eu, ${a.usuario}, lotado(a) em ${a.localizacao || 'não informado'},`, margin, y);
                     y += lineHeight;
                     doc.text(`declaro ter recebido da STCP ENGENHARIA os equipamentos e softwares abaixo`, margin, y);
                     y += lineHeight;
                     doc.text(`relacionados em ${dataFormatada}:`, margin, y);
                     y += lineHeight * 1.5;
                     
+                    // Equipamentos
                     doc.setFont('helvetica', 'bold');
                     doc.text('Equipamentos:', margin, y);
                     y += lineHeight;
@@ -979,29 +1607,42 @@
                     
                     y += lineHeight * 0.5;
                     
+                    // Softwares
+                    if (a.softwares.length > 0) {
+                        doc.setFont('helvetica', 'bold');
+                        doc.text('Softwares:', margin, y);
+                        y += lineHeight;
+                        
+                        doc.setFont('helvetica', 'normal');
+                        a.softwares.forEach(sw => {
+                            doc.text(`- ${sw.nome} — Licença ${sw.chave}`, margin + 5, y);
+                            y += lineHeight;
+                        });
+                        
+                        y += lineHeight * 0.5;
+                    }
+                    
+                    // Compromissos
                     doc.setFont('helvetica', 'bold');
-                    doc.text('Softwares:', margin, y);
+                    doc.text('Comprometo-me a:', margin, y);
                     y += lineHeight;
                     
                     doc.setFont('helvetica', 'normal');
-                    a.softwares.forEach(sw => {
-                        doc.text(`- ${sw.nome} — Licença ${sw.chave}`, margin + 5, y);
+                    const compromissos = [
+                        'Zelar pela integridade física e conservação dos equipamentos;',
+                        'Não os emprestar ou transferi-los;',
+                        'Comunicar imediatamente qualquer dano, extravio ou furto;',
+                        'Devolvê-los nas mesmas condições ao término do uso ou solicitação.'
+                    ];
+                    
+                    compromissos.forEach(texto => {
+                        doc.text(`• ${texto}`, margin + 5, y);
                         y += lineHeight;
                     });
                     
-                    y += lineHeight * 1.5;
-                    
-                    doc.text('Comprometo-me a:', margin, y);
-                    y += lineHeight;
-                    doc.text('• Zelar pela integridade física e conservação dos equipamentos;', margin + 5, y);
-                    y += lineHeight;
-                    doc.text('• Não os emprestar ou transferi-los;', margin + 5, y);
-                    y += lineHeight;
-                    doc.text('• Comunicar imediatamente qualquer dano, extravio ou furto;', margin + 5, y);
-                    y += lineHeight;
-                    doc.text('• Devolvê-los nas mesmas condições ao término do uso ou solicitação.', margin + 5, y);
                     y += lineHeight * 2;
                     
+                    // Data e assinatura
                     doc.text(`Goiânia, ${dataFormatada}.`, margin, y);
                     y += lineHeight * 3;
                     
@@ -1009,7 +1650,12 @@
                     y += lineHeight;
                     doc.text('(Assinatura do responsável)', 105, y, { align: 'center' });
                     
-                    doc.save(`termo_responsabilidade_${a.usuario}_${dataFormatada.replace(/\//g, '-')}.pdf`);
+                    // Rodapé
+                    doc.setFontSize(10);
+                    doc.setTextColor(150);
+                    doc.text('Documento gerado automaticamente pelo Sistema de Controle de Estoque GOINFRA', 105, 285, { align: 'center' });
+                    
+                    doc.save(`termo_responsabilidade_${a.usuario.replace(/\s/g, '_')}_${dataFormatada.replace(/\//g, '-')}.pdf`);
                 }
             }
         });
