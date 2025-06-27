@@ -511,7 +511,7 @@
                     </div>
                 </transition>
 
-                <!-- Estoque -->
+                <!-- Estoque - Versão Corrigida (Sem Duplicação) -->
                 <transition name="fade">
                     <div v-if="abaAtiva==='estoque'">
                         <!-- Barra de Busca Avançada -->
@@ -628,7 +628,7 @@
                             </div>
                         </div>
 
-                        <!-- Lista de Equipamentos -->
+                        <!-- Lista de Equipamentos Agrupados -->
                         <div class="card">
                             <div class="card-header bg-white d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0"><i class="fas fa-boxes mr-2"></i>Lista de Equipamentos</h5>
@@ -643,7 +643,7 @@
                                             <i :class="[iconeTipo(tipo),'mr-2']"></i>
                                             <strong>{{tipo}}</strong>
                                             <span class="text-muted ml-2">
-                                                ({{ equipamentosFiltrados.filter(e => e.tipo === tipo).length }} itens)
+                                                ({{ equipamentosPorTipo(tipo).length }} itens)
                                             </span>
                                         </div>
                                         <button class="btn btn-sm btn-outline-secondary" 
@@ -654,7 +654,7 @@
                                     
                                     <transition name="fade">
                                         <div v-if="estoqueVisivel[tipo]">
-                                            <div v-for="modelo in modelosPorTipoFiltrados(tipo)" 
+                                            <div v-for="modelo in modelosPorTipo(tipo)" 
                                                  :key="modelo.modelo" 
                                                  class="p-3 border-bottom">
                                                 <div class="d-flex justify-content-between align-items-center mb-2">
@@ -666,29 +666,38 @@
                                                     </span>
                                                 </div>
                                                 
-                                                <div class="row">
-                                                    <div v-for="equip in equipamentosFiltrados.filter(e => e.tipo === tipo && e.modelo === modelo.modelo)" 
-                                                         :key="equip.patrimonio" 
-                                                         class="col-md-6 col-lg-4 mb-2">
-                                                        <div class="d-flex justify-content-between align-items-center p-2 bg-white rounded border">
-                                                            <div>
-                                                                <span class="status-badge" 
-                                                                      :class="equip.situacao==='Disponível'?'status-available':'status-unavailable'"></span>
-                                                                {{ equip.patrimonio }}
-                                                            </div>
-                                                            <div>
-                                                                <span class="badge" 
-                                                                      :class="equip.situacao==='Disponível'?'badge-success':'badge-danger'">
-                                                                    {{ equip.situacao }}
-                                                                </span>
-                                                                <button v-if="usuarioAtual.perfil === 'Administrador'" 
-                                                                        class="btn btn-sm btn-outline-danger ml-2" 
-                                                                        @click="removerEquipamento(equip.patrimonio)">
-                                                                    <i class="fas fa-trash"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-sm table-hover mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Patrimônio</th>
+                                                                <th>Situação</th>
+                                                                <th v-if="usuarioAtual.perfil === 'Administrador'">Ações</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr v-for="equip in equipamentosFiltrados.filter(e => e.tipo === tipo && e.modelo === modelo.modelo)" 
+                                                                :key="equip.patrimonio">
+                                                                <td>
+                                                                    <span class="status-badge" 
+                                                                          :class="equip.situacao==='Disponível'?'status-available':'status-unavailable'"></span>
+                                                                    {{ equip.patrimonio }}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge" 
+                                                                          :class="equip.situacao==='Disponível'?'badge-success':'badge-danger'">
+                                                                        {{ equip.situacao }}
+                                                                    </span>
+                                                                </td>
+                                                                <td v-if="usuarioAtual.perfil === 'Administrador'">
+                                                                    <button class="btn btn-sm btn-outline-danger" 
+                                                                            @click="removerEquipamento(equip.patrimonio)">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>
