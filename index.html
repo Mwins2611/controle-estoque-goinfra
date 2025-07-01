@@ -200,6 +200,19 @@
             color: #306aa4;
             margin-left: 5px;
         }
+        
+        .edicao-usuario {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .edicao-usuario h5 {
+            margin-top: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
     </style>
 </head>
 
@@ -284,6 +297,10 @@
                             @click.prevent="abaAtiva='softwares'">Softwares</a></li>
                     <li class="nav-item"><a class="nav-link" :class="{active: abaAtiva==='relatorio'}" href="#"
                             @click.prevent="abaAtiva='relatorio'">Relatório</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" :class="{active: abaAtiva==='novos-itens'}" href="#" 
+                           @click.prevent="abaAtiva='novos-itens'">Novos Itens</a>
+                    </li>
                 </ul>
 
                 <!-- Relatório -->
@@ -295,6 +312,67 @@
                         </select>
                         <input type="number" v-model="anoRelatorio" class="form-control mr-2" placeholder="Ano" />
                         <button class="btn btn-primary" @click="gerarRelatorio()">Baixar CSV</button>
+                    </div>
+                </div>
+
+                <!-- Relatório de Novos Itens -->
+                <div v-if="abaAtiva==='novos-itens'" class="card mb-4">
+                    <div class="card-header">
+                        <h5>Relatório de Novos Itens Adicionados</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row mb-3">
+                            <div class="col-md-3">
+                                <label>Data Inicial</label>
+                                <input type="date" v-model="filtroNovosItens.dataInicio" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <label>Data Final</label>
+                                <input type="date" v-model="filtroNovosItens.dataFim" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <label>Tipo de Item</label>
+                                <select v-model="filtroNovosItens.tipo" class="form-control">
+                                    <option value="">Todos</option>
+                                    <option v-for="tipo in tiposEquipamentos" :value="tipo">{{tipo}}</option>
+                                    <option value="software">Softwares</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button class="btn btn-primary w-100" @click="gerarRelatorioNovosItens">
+                                    <i class="fas fa-file-export"></i> Gerar Relatório
+                                </button>
+                            </div>
+                        </div>
+
+                        <div v-if="relatorioNovosItens.length > 0" class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Tipo</th>
+                                        <th>Modelo/Software</th>
+                                        <th>Patrimônio/Chave</th>
+                                        <th>Situação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, index) in relatorioNovosItens" :key="index">
+                                        <td>{{ formatarData(item.data) }}</td>
+                                        <td>{{ item.tipo }}</td>
+                                        <td>{{ item.modelo || item.nome }}</td>
+                                        <td>{{ item.patrimonio || item.chave }}</td>
+                                        <td>{{ item.situacao }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button class="btn btn-success mt-2" @click="exportarNovosItensCSV">
+                                <i class="fas fa-file-csv"></i> Exportar para CSV
+                            </button>
+                        </div>
+                        <div v-else class="alert alert-info">
+                            Nenhum item encontrado no período selecionado.
+                        </div>
                     </div>
                 </div>
 
@@ -353,7 +431,7 @@
                     </form>
                 </div>
 
-                <!-- Estoque (CORRIGIDO) -->
+                <!-- Estoque -->
                 <div v-if="abaAtiva==='estoque'">
                     <h4>Estoque</h4>
                     
@@ -527,25 +605,115 @@
                     
                     <div class="usuarios-scroll">
                         <div v-for="(a,i) in atribuicoesFiltradas" :key="i" class="card-user">
-                            <h5>{{a.usuario}}</h5>
-                            <p><strong>Email:</strong> {{a.email}}</p>
-                            <p><strong>Localização:</strong> {{a.localizacao}}</p>
-                            <p><strong>Equipamentos:</strong></p>
-                            <ul>
-                                <li v-for="e in a.equipamentos" :key="e.patrimonio">{{e.tipo}} – {{e.modelo}} ({{e.patrimonio}})
-                                </li>
-                            </ul>
-                            <p><strong>Softwares:</strong></p>
-                            <ul>
-                                <li v-for="s in a.softwares" :key="s.nome">{{s.nome}} – {{s.chave}}</li>
-                            </ul>
-                            <div class="mt-2">
-                                <button class="btn btn-info btn-sm mr-2" @click="gerarTermoPDF(a)"><i
-                                        class="fas fa-file-pdf"></i> Gerar Termo</button>
-                                <button v-if="isAdmin" class="btn btn-warning btn-sm mr-2" @click="editarUsuario(i)"><i
-                                        class="fas fa-edit"></i> Editar</button>
-                                <button v-if="isAdmin" class="btn btn-danger btn-sm" @click="excluirUsuario(i)"><i class="fas fa-trash"></i>
-                                    Excluir</button>
+                            <div v-if="!a.editando">
+                                <h5>{{a.usuario}}</h5>
+                                <p><strong>Email:</strong> {{a.email}}</p>
+                                <p><strong>Localização:</strong> {{a.localizacao}}</p>
+                                <p><strong>Equipamentos:</strong></p>
+                                <ul>
+                                    <li v-for="e in a.equipamentos" :key="e.patrimonio">
+                                        {{e.tipo}} – {{e.modelo}} ({{e.patrimonio}})
+                                        <button v-if="isAdmin && a.editando" class="btn btn-sm btn-danger ml-2" 
+                                                @click="removerEquipamentoAtribuicao(i, e.patrimonio)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </li>
+                                </ul>
+                                <p><strong>Softwares:</strong></p>
+                                <ul>
+                                    <li v-for="s in a.softwares" :key="s.chave">
+                                        {{s.nome}} – {{s.chave}}
+                                        <button v-if="isAdmin && a.editando" class="btn btn-sm btn-danger ml-2" 
+                                                @click="removerSoftwareAtribuicao(i, s.nome, s.chave)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="mt-2">
+                                    <button class="btn btn-info btn-sm mr-2" @click="gerarTermoPDF(a)">
+                                        <i class="fas fa-file-pdf"></i> Gerar Termo
+                                    </button>
+                                    <button v-if="isAdmin" class="btn btn-warning btn-sm mr-2" @click="iniciarEdicaoUsuario(i)">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <button v-if="isAdmin" class="btn btn-danger btn-sm" @click="excluirUsuario(i)">
+                                        <i class="fas fa-trash"></i> Excluir
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Formulário de edição (aparece quando editando) -->
+                            <div v-if="a.editando" class="edicao-usuario">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label>Nome</label>
+                                        <input type="text" class="form-control" v-model="a.usuario" required />
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Email</label>
+                                        <input type="email" class="form-control" v-model="a.email" />
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Localização</label>
+                                        <input type="text" class="form-control" v-model="a.localizacao" />
+                                    </div>
+                                </div>
+                                
+                                <h5>Equipamentos</h5>
+                                <div v-for="tipo in tiposEquipamentos" :key="tipo" class="mb-3">
+                                    <div class="estoque-toggle font-weight-bold mb-2" @click="toggleEstoque(tipo)">
+                                        <i :class="[iconeTipo(tipo),'mr-2']"></i> {{tipo}} - Disponíveis: {{contarDisponiveis(tipo)}}
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div v-if="estoqueVisivel[tipo]">
+                                        <div class="form-check" v-for="equip in equipamentosDisponiveis.filter(e=>e.tipo===tipo)"
+                                            :key="equip.patrimonio">
+                                            <input class="form-check-input" type="checkbox" :value="equip.patrimonio"
+                                                :checked="a.equipamentos.some(e => e.patrimonio === equip.patrimonio)"
+                                                @change="toggleEquipamentoAtribuicao(i, equip)" />
+                                            <label class="form-check-label">
+                                                <i :class="[iconeTipo(equip.tipo),'mr-2','icon-disponivel']"></i>
+                                                {{equip.tipo}} – {{equip.modelo}} ({{equip.patrimonio}})
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h5>Softwares</h5>
+                                <div v-for="(soft,j) in a.softwares" :key="j" class="form-row mb-2 align-items-center">
+                                    <div class="col-md-5">
+                                        <select class="form-control" v-model="soft.nome" @change="atualizarSoftwareAtribuicao(i, j, $event)">
+                                            <option disabled value="">Selecione o software</option>
+                                            <option v-for="sw in softwaresDisponiveis" :value="sw.nome" 
+                                                    :disabled="sw.situacao === 'Indisponível' && !a.softwares.some(s => s.chave === sw.chave)">
+                                                {{sw.nome}} ({{sw.situacao}})
+                                            </option>
+                                            <option>Outro</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" v-model="soft.chave" 
+                                               placeholder="Chave de acesso" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <span class="btn-remove-software" @click="removerSoftwareAtribuicao(i, soft.nome, soft.chave)">
+                                            <i class="fas fa-minus-circle"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn btn-secondary btn-sm mb-3" @click="adicionarSoftwareAtribuicao(i)">
+                                    <i class="fas fa-plus"></i> Adicionar Software
+                                </button>
+                                
+                                <div class="d-flex justify-content-end">
+                                    <button class="btn btn-success mr-2" @click="salvarEdicaoUsuario(i)">
+                                        <i class="fas fa-save"></i> Salvar
+                                    </button>
+                                    <button class="btn btn-danger" @click="cancelarEdicaoUsuario(i)">
+                                        <i class="fas fa-times"></i> Cancelar
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -595,7 +763,14 @@
                 modelosCadastrados: [],
                 modeloSelecionado: null,
                 patrimoniosParaAdicionar: '',
-                filtroUsuario: ''
+                filtroUsuario: '',
+                filtroNovosItens: {
+                    dataInicio: '',
+                    dataFim: '',
+                    tipo: ''
+                },
+                relatorioNovosItens: [],
+                historicoAdicoes: []
             },
             mounted() {
                 // Inicializa estoqueVisivel para cada tipo de equipamento
@@ -610,6 +785,7 @@
                     this.atribuicoes = st.atribuicoes || []; 
                     this.softwares = st.softwares || [];
                     this.modelosCadastrados = st.modelosCadastrados || this.extrairModelosUnicos(st.equipamentos || []);
+                    this.historicoAdicoes = st.historicoAdicoes || [];
                 }
                 else { 
                     this.equipamentos = [
@@ -642,7 +818,8 @@
                 }, 
                 atribuicoes: { handler: 'save', deep: true },
                 softwares: { handler: 'save', deep: true },
-                modelosCadastrados: { handler: 'save', deep: true }
+                modelosCadastrados: { handler: 'save', deep: true },
+                historicoAdicoes: { handler: 'save', deep: true }
             },
             computed: {
                 equipamentosDisponiveis() { return this.equipamentos.filter(e => e.situacao === 'Disponível') },
@@ -755,12 +932,14 @@
                         const existe = this.equipamentos.some(e => e.patrimonio === patrimonio);
                         
                         if (!existe) {
-                            this.equipamentos.push({
+                            const novoEquipamento = {
                                 tipo: modelo.tipo,
                                 modelo: modelo.modelo,
                                 patrimonio: patrimonio,
                                 situacao: 'Disponível'
-                            });
+                            };
+                            this.equipamentos.push(novoEquipamento);
+                            this.registrarAdicao(novoEquipamento, modelo.tipo);
                             adicionados++;
                         } else {
                             duplicados++;
@@ -775,6 +954,68 @@
                     }
                     
                     alert(mensagem);
+                },
+                formatarData(dataString) {
+                    if (!dataString) return '';
+                    const data = new Date(dataString);
+                    return data.toLocaleDateString('pt-BR');
+                },
+                registrarAdicao(item, tipo) {
+                    this.historicoAdicoes.push({
+                        ...item,
+                        tipo: tipo,
+                        data: new Date().toISOString()
+                    });
+                },
+                gerarRelatorioNovosItens() {
+                    if (!this.filtroNovosItens.dataInicio || !this.filtroNovosItens.dataFim) {
+                        alert('Selecione o período inicial e final');
+                        return;
+                    }
+
+                    const inicio = new Date(this.filtroNovosItens.dataInicio);
+                    const fim = new Date(this.filtroNovosItens.dataFim);
+                    fim.setHours(23, 59, 59, 999); // Inclui todo o dia final
+
+                    this.relatorioNovosItens = this.historicoAdicoes.filter(item => {
+                        const dataItem = new Date(item.data);
+                        const tipoMatch = !this.filtroNovosItens.tipo || 
+                                         item.tipo === this.filtroNovosItens.tipo ||
+                                         (this.filtroNovosItens.tipo === 'software' && item.nome);
+                        
+                        return dataItem >= inicio && 
+                               dataItem <= fim && 
+                               tipoMatch;
+                    }).sort((a, b) => new Date(b.data) - new Date(a.data));
+                },
+                exportarNovosItensCSV() {
+                    if (this.relatorioNovosItens.length === 0) {
+                        alert('Nenhum dado para exportar');
+                        return;
+                    }
+
+                    const header = ['Data', 'Tipo', 'Modelo/Software', 'Patrimônio/Chave', 'Situação'];
+                    const rows = this.relatorioNovosItens.map(item => [
+                        this.formatarData(item.data),
+                        item.tipo,
+                        item.modelo || item.nome || '',
+                        item.patrimonio || item.chave || '',
+                        item.situacao || ''
+                    ]);
+
+                    const csv = [header, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\r\n');
+                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                    const fname = `novos-itens_${this.filtroNovosItens.dataInicio}_a_${this.filtroNovosItens.dataFim}.csv`;
+                    
+                    if (navigator.msSaveBlob) {
+                        navigator.msSaveBlob(blob, fname);
+                    } else {
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = fname;
+                        link.click();
+                        URL.revokeObjectURL(link.href);
+                    }
                 },
                 fazerLogin() {
                     if (this.login.usuario === this.adminCredentials.usuario && 
@@ -807,7 +1048,8 @@
                         equipamentos: this.equipamentos, 
                         atribuicoes: this.atribuicoes,
                         softwares: this.softwares,
-                        modelosCadastrados: this.modelosCadastrados
+                        modelosCadastrados: this.modelosCadastrados,
+                        historicoAdicoes: this.historicoAdicoes
                     })); 
                 },
                 toggleEstoque(tipo) { 
@@ -844,12 +1086,23 @@
                         localizacao: this.novaLocalizacao,
                         equipamentos: this.equipamentos.filter(e => this.equipamentosSelecionados.includes(e.patrimonio)),
                         softwares: [...this.softwaresSelecionados.filter(s => s.nome && s.chave)], 
-                        data: new Date().toISOString()
+                        data: new Date().toISOString(),
+                        editando: false
                     };
                     
                     this.equipamentos = this.equipamentos.map(e => 
                         this.equipamentosSelecionados.includes(e.patrimonio) ? { ...e, situacao: 'Indisponível' } : e
                     );
+                    
+                    // Atualiza status dos softwares
+                    this.softwaresSelecionados.forEach(sw => {
+                        if (sw.nome && sw.chave) {
+                            const software = this.softwares.find(s => s.nome === sw.nome && s.chave === sw.chave);
+                            if (software) {
+                                software.situacao = 'Indisponível';
+                            }
+                        }
+                    });
                     
                     this.atribuicoes.push(atrib);
                     this.novoUsuario = this.novoEmail = this.novaLocalizacao = ''; 
@@ -874,6 +1127,7 @@
                 },
                 adicionarSoftware() {
                     this.softwares.push({ ...this.novoSoftware });
+                    this.registrarAdicao({ ...this.novoSoftware }, 'software');
                     this.novoSoftware = { nome: '', chave: '', situacao: 'Disponível' };
                 },
                 removerSoftwareCadastrado(index) {
@@ -910,23 +1164,134 @@
                         this.atribuicoes.splice(i, 1); 
                     } 
                 },
-                editarUsuario(i) { 
-                    const a = this.atribuicoes[i]; 
-                    this.novoUsuario = a.usuario; 
-                    this.novoEmail = a.email; 
-                    this.novaLocalizacao = a.localizacao; 
-                    this.equipamentosSelecionados = a.equipamentos.map(e => e.patrimonio); 
-                    this.softwaresSelecionados = JSON.parse(JSON.stringify(a.softwares)); 
-                    a.equipamentos.forEach(eq => { 
-                        const e = this.equipamentos.find(x => x.patrimonio === eq.patrimonio); 
-                        if (e) e.situacao = 'Disponível' 
+                iniciarEdicaoUsuario(index) {
+                    // Cria uma cópia da atribuição para edição
+                    const atribuicao = this.atribuicoes[index];
+                    this.$set(this.atribuicoes, index, {
+                        ...atribuicao,
+                        editando: true,
+                        equipamentosOriginal: [...atribuicao.equipamentos],
+                        softwaresOriginal: [...atribuicao.softwares]
                     });
-                    a.softwares.forEach(sw => {
-                        const s = this.softwares.find(x => x.nome === sw.nome && x.chave === sw.chave);
-                        if (s) s.situacao = 'Disponível';
+                },
+                cancelarEdicaoUsuario(index) {
+                    // Restaura os valores originais
+                    const atribuicao = this.atribuicoes[index];
+                    this.$set(this.atribuicoes, index, {
+                        ...atribuicao,
+                        editando: false,
+                        equipamentos: [...atribuicao.equipamentosOriginal],
+                        softwares: [...atribuicao.softwaresOriginal]
                     });
-                    this.atribuicoes.splice(i, 1); 
-                    this.abaAtiva = 'atribuicao' 
+                    
+                    // Libera os equipamentos e softwares que foram marcados durante a edição
+                    this.liberarItensTemporarios(index);
+                },
+                salvarEdicaoUsuario(index) {
+                    const atribuicao = this.atribuicoes[index];
+                    
+                    // Validação básica
+                    if (!atribuicao.usuario || atribuicao.usuario.trim() === '') {
+                        alert('O nome do usuário é obrigatório');
+                        return;
+                    }
+                    
+                    // Atualiza a data de modificação
+                    atribuicao.data = new Date().toISOString();
+                    
+                    // Remove os campos temporários e finaliza a edição
+                    delete atribuicao.equipamentosOriginal;
+                    delete atribuicao.softwaresOriginal;
+                    atribuicao.editando = false;
+                    
+                    // Atualiza o status dos equipamentos e softwares
+                    this.atualizarStatusItens(atribuicao);
+                    
+                    alert('Atribuição atualizada com sucesso!');
+                },
+                toggleEquipamentoAtribuicao(index, equipamento) {
+                    const atribuicao = this.atribuicoes[index];
+                    const equipIndex = atribuicao.equipamentos.findIndex(e => e.patrimonio === equipamento.patrimonio);
+                    
+                    if (equipIndex >= 0) {
+                        // Remove o equipamento
+                        atribuicao.equipamentos.splice(equipIndex, 1);
+                    } else {
+                        // Adiciona o equipamento
+                        atribuicao.equipamentos.push({
+                            tipo: equipamento.tipo,
+                            modelo: equipamento.modelo,
+                            patrimonio: equipamento.patrimonio
+                        });
+                    }
+                },
+                removerEquipamentoAtribuicao(index, patrimonio) {
+                    const atribuicao = this.atribuicoes[index];
+                    const equipIndex = atribuicao.equipamentos.findIndex(e => e.patrimonio === patrimonio);
+                    
+                    if (equipIndex >= 0) {
+                        atribuicao.equipamentos.splice(equipIndex, 1);
+                    }
+                },
+                adicionarSoftwareAtribuicao(index) {
+                    this.atribuicoes[index].softwares.push({ nome: '', chave: '' });
+                },
+                removerSoftwareAtribuicao(index, nome, chave) {
+                    const softwares = this.atribuicoes[index].softwares;
+                    const softwareIndex = softwares.findIndex(s => s.nome === nome && s.chave === chave);
+                    
+                    if (softwareIndex >= 0) {
+                        softwares.splice(softwareIndex, 1);
+                    }
+                },
+                atualizarSoftwareAtribuicao(atribuicaoIndex, softwareIndex, event) {
+                    const nomeSoftware = event.target.value;
+                    const software = this.softwares.find(s => s.nome === nomeSoftware && s.situacao === 'Disponível');
+                    
+                    if (software) {
+                        this.$set(this.atribuicoes[atribuicaoIndex].softwares, softwareIndex, {
+                            nome: software.nome,
+                            chave: software.chave
+                        });
+                    }
+                },
+                liberarItensTemporarios(index) {
+                    const atribuicao = this.atribuicoes[index];
+                    
+                    // Libera equipamentos que foram adicionados durante a edição mas não foram salvos
+                    const equipamentosAdicionados = atribuicao.equipamentos.filter(eq => 
+                        !atribuicao.equipamentosOriginal.some(e => e.patrimonio === eq.patrimonio));
+                    
+                    equipamentosAdicionados.forEach(eq => {
+                        const equip = this.equipamentos.find(e => e.patrimonio === eq.patrimonio);
+                        if (equip) {
+                            equip.situacao = 'Disponível';
+                        }
+                    });
+                    
+                    // Libera softwares que foram adicionados durante a edição mas não foram salvos
+                    const softwaresAdicionados = atribuicao.softwares.filter(sw => 
+                        !atribuicao.softwaresOriginal.some(s => s.chave === sw.chave));
+                    
+                    softwaresAdicionados.forEach(sw => {
+                        const software = this.softwares.find(s => s.chave === sw.chave);
+                        if (software) {
+                            software.situacao = 'Disponível';
+                        }
+                    });
+                },
+                atualizarStatusItens(atribuicao) {
+                    // Atualiza status dos equipamentos
+                    this.equipamentos.forEach(e => {
+                        const estaAtribuido = atribuicao.equipamentos.some(eq => eq.patrimonio === e.patrimonio);
+                        e.situacao = estaAtribuido ? 'Indisponível' : 'Disponível';
+                    });
+                    
+                    // Atualiza status dos softwares
+                    this.softwares.forEach(s => {
+                        const estaAtribuido = atribuicao.softwares.some(sw => sw.chave === s.chave);
+                        s.situacao = estaAtribuido ? 'Indisponível' : 'Disponível';
+                    });
                 },
                 gerarRelatorio() {
                     const rows = this.atribuicoes.filter(a => { 
