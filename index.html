@@ -10,8 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #1a3e72;
@@ -39,7 +38,6 @@
             line-height: 1.6;
         }
 
-        /* Header Moderno com Logo */
         .fixed-header {
             position: fixed;
             top: 0;
@@ -123,7 +121,6 @@
             text-decoration: none;
         }
 
-        /* Cards Modernos */
         .card-user {
             border: none;
             border-radius: 10px;
@@ -160,7 +157,6 @@
             border-left: 4px solid var(--stcp-blue);
         }
 
-        /* Botões Modernos */
         .btn {
             border-radius: 6px;
             padding: 8px 20px;
@@ -204,7 +200,6 @@
             color: white;
         }
 
-        /* Abas Estilizadas */
         .nav-tabs {
             margin-bottom: 25px;
             background: white;
@@ -244,7 +239,6 @@
             box-shadow: 0 2px 8px rgba(0, 86, 179, 0.3);
         }
 
-        /* Container Principal */
         .container {
             background: white;
             padding: 25px;
@@ -255,7 +249,6 @@
             max-width: 1400px;
         }
 
-        /* Dispositivos Header */
         .dispositivo-header {
             display: flex;
             justify-content: space-between;
@@ -327,7 +320,6 @@
             font-weight: bold;
         }
 
-        /* Formulários Modernos */
         .form-control {
             border-radius: 6px;
             padding: 12px 15px;
@@ -348,7 +340,6 @@
             font-size: 0.9rem;
         }
 
-        /* Ícones e Status */
         .icon-disponivel {
             color: var(--success-color);
         }
@@ -365,7 +356,6 @@
             transform: rotate(180deg);
         }
 
-        /* Tabelas */
         .table {
             border-collapse: separate;
             border-spacing: 0;
@@ -400,7 +390,6 @@
             vertical-align: middle;
         }
 
-        /* Edição de Usuário */
         .edicao-usuario {
             padding: 20px;
             border-radius: 8px;
@@ -417,7 +406,6 @@
             padding-bottom: 8px;
         }
 
-        /* Loading Overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -450,7 +438,6 @@
             }
         }
 
-        /* Toast Notifications */
         .toast-container {
             position: fixed;
             bottom: 20px;
@@ -498,7 +485,6 @@
             }
         }
 
-        /* Responsividade */
         @media (max-width: 992px) {
             .header-content {
                 flex-direction: column;
@@ -562,7 +548,6 @@
             }
         }
 
-        /* Efeitos de hover */
         .btn-remove-software {
             color: var(--danger-color);
             cursor: pointer;
@@ -585,7 +570,6 @@
             background-color: rgba(0, 86, 179, 0.05);
         }
 
-        /* Badges */
         .badge {
             border-radius: 50px;
             padding: 5px 10px;
@@ -608,7 +592,6 @@
             color: var(--dark-color);
         }
 
-        /* Login Container */
         .login-container {
             max-width: 400px;
             margin: 100px auto;
@@ -635,7 +618,6 @@
             margin-right: 10px;
         }
 
-        /* Alertas */
         .alert {
             border-radius: 8px;
             padding: 12px 15px;
@@ -647,7 +629,6 @@
             border-left-color: var(--danger-color);
         }
 
-        /* Scrollbar personalizada */
         .usuarios-scroll {
             max-height: 500px;
             overflow-y: auto;
@@ -672,7 +653,6 @@
             background: #004494;
         }
 
-        /* Software Items */
         .software-item {
             display: flex;
             justify-content: space-between;
@@ -701,7 +681,6 @@
             margin-left: 5px;
         }
 
-        /* Patrimonio List */
         .patrimonio-list {
             max-height: 200px;
             overflow-y: auto;
@@ -719,20 +698,17 @@
             background-color: #f8fafc;
         }
 
-        /* Ícones personalizados */
         .icon-stcp {
             color: var(--stcp-orange);
             margin-right: 8px;
         }
 
-        /* Grid de dispositivos */
         .dispositivos-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 15px;
         }
 
-        /* Botão de ação flutuante */
         .floating-action-btn {
             position: fixed;
             bottom: 30px;
@@ -777,7 +753,7 @@
         <!-- Tela de Login -->
         <div v-if="!usuarioLogado" class="login-container">
             <h3 class="text-center mb-4">
-                <img src="logo.png"
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/STCP.svg/1200px-STCP.svg.png"
                     alt="STCP Logo" style="height: 30px;">
                 Acesso Administrativo
             </h3>
@@ -1392,38 +1368,11 @@
                             'tablet': 'fas fa-tablet-alt',
                             'smartphone': 'fas fa-mobile-alt'
                         },
-                        totaisDispositivos: [
-                            { tipo: 'Notebooks', icone: 'fas fa-laptop', disponiveis: 12, indisponiveis: 8, total: 20 },
-                            { tipo: 'Desktops', icone: 'fas fa-desktop', disponiveis: 5, indisponiveis: 15, total: 20 },
-                            { tipo: 'Monitores', icone: 'fas fa-tv', disponiveis: 10, indisponiveis: 10, total: 20 },
-                            { tipo: 'Impressoras', icone: 'fas fa-print', disponiveis: 3, indisponiveis: 7, total: 10 }
-                        ],
-                        dispositivos: [
-                            { id: 1, tipo: 'notebook', modelo: 'Dell Latitude 5420', patrimonio: 'STCP12345', status: 'disponivel', especificacoes: 'i5 10th, 8GB RAM, 256GB SSD' },
-                            { id: 2, tipo: 'notebook', modelo: 'Dell Latitude 5420', patrimonio: 'STCP12346', status: 'disponivel', especificacoes: 'i5 10th, 8GB RAM, 256GB SSD' },
-                            { id: 3, tipo: 'notebook', modelo: 'HP EliteBook 840', patrimonio: 'STCP12347', status: 'indisponivel', especificacoes: 'i7 11th, 16GB RAM, 512GB SSD' },
-                            { id: 4, tipo: 'desktop', modelo: 'Dell OptiPlex 3080', patrimonio: 'STCP12348', status: 'disponivel', especificacoes: 'i5 10th, 8GB RAM, 1TB HDD' },
-                            { id: 5, tipo: 'desktop', modelo: 'Dell OptiPlex 3080', patrimonio: 'STCP12349', status: 'indisponivel', especificacoes: 'i5 10th, 8GB RAM, 1TB HDD' },
-                            { id: 6, tipo: 'monitor', modelo: 'Dell P2421D', patrimonio: 'STCP12350', status: 'disponivel', especificacoes: '24" Full HD' },
-                            { id: 7, tipo: 'monitor', modelo: 'Dell P2720Q', patrimonio: 'STCP12351', status: 'indisponivel', especificacoes: '27" 4K' },
-                            { id: 8, tipo: 'impressora', modelo: 'HP LaserJet MFP M428fdw', patrimonio: 'STCP12352', status: 'indisponivel', especificacoes: 'Multifuncional Laser' }
-                        ],
-                        usuarios: [
-                            { id: 1, nome: 'João Silva', departamento: 'Engenharia', email: 'joao.silva@stcp.com.br' },
-                            { id: 2, nome: 'Maria Oliveira', departamento: 'Projetos', email: 'maria.oliveira@stcp.com.br' },
-                            { id: 3, nome: 'Carlos Souza', departamento: 'Administrativo', email: 'carlos.souza@stcp.com.br' },
-                            { id: 4, nome: 'Ana Costa', departamento: 'Financeiro', email: 'ana.costa@stcp.com.br' }
-                        ],
-                        softwares: [
-                            { id: 1, nome: 'Microsoft Office 365', chave: 'XXXXX-XXXXX-XXXXX-XXXXX', quantidade: 20, emUso: 15 },
-                            { id: 2, nome: 'AutoCAD 2023', chave: 'YYYYY-YYYYY-YYYYY-YYYYY', quantidade: 5, emUso: 3 },
-                            { id: 3, nome: 'Adobe Creative Cloud', chave: 'ZZZZZ-ZZZZZ-ZZZZZ-ZZZZZ', quantidade: 10, emUso: 8 }
-                        ],
-                        atribuicoes: [
-                            { id: 1, usuarioId: 1, dispositivoId: 3, data: '2023-05-15', observacoes: 'Atribuição inicial' },
-                            { id: 2, usuarioId: 2, dispositivoId: 5, data: '2023-05-10', observacoes: 'Substituição de equipamento' },
-                            { id: 3, usuarioId: 3, dispositivoId: 7, data: '2023-05-05', observacoes: 'Novo colaborador' }
-                        ],
+                        totaisDispositivos: [],
+                        dispositivos: [],
+                        usuarios: [],
+                        softwares: [],
+                        atribuicoes: [],
                         atribuicao: {
                             usuarioId: '',
                             dispositivoId: '',
@@ -1501,6 +1450,98 @@
                         }
                     },
                     methods: {
+                        salvarDados() {
+                            const dados = {
+                                dispositivos: this.dispositivos,
+                                usuarios: this.usuarios,
+                                softwares: this.softwares,
+                                atribuicoes: this.atribuicoes,
+                                totaisDispositivos: this.totaisDispositivos
+                            };
+                            localStorage.setItem('goinfraEstoqueData', JSON.stringify(dados));
+                        },
+
+                        carregarDados() {
+                            const dadosSalvos = localStorage.getItem('goinfraEstoqueData');
+                            if (dadosSalvos) {
+                                const dados = JSON.parse(dadosSalvos);
+                                this.dispositivos = dados.dispositivos || [];
+                                this.usuarios = dados.usuarios || [];
+                                this.softwares = dados.softwares || [];
+                                this.atribuicoes = dados.atribuicoes || [];
+                                this.totaisDispositivos = dados.totaisDispositivos || this.calcularTotaisIniciais();
+                            } else {
+                                this.inicializarDadosPadrao();
+                            }
+                        },
+
+                        calcularTotaisIniciais() {
+                            const totais = {};
+                            
+                            // Calcular totais baseados nos dispositivos existentes
+                            this.dispositivos.forEach(dispositivo => {
+                                const tipoFormatado = this.formatarTipo(dispositivo.tipo) + 's';
+                                
+                                if (!totais[tipoFormatado]) {
+                                    totais[tipoFormatado] = {
+                                        tipo: tipoFormatado,
+                                        icone: this.iconesDispositivos[dispositivo.tipo] || 'fas fa-box',
+                                        disponiveis: 0,
+                                        indisponiveis: 0,
+                                        total: 0
+                                    };
+                                }
+                                
+                                totais[tipoFormatado].total++;
+                                if (dispositivo.status === 'disponivel') {
+                                    totais[tipoFormatado].disponiveis++;
+                                } else {
+                                    totais[tipoFormatado].indisponiveis++;
+                                }
+                            });
+                            
+                            return Object.values(totais);
+                        },
+
+                        inicializarDadosPadrao() {
+                            this.dispositivos = [
+                                { id: 1, tipo: 'notebook', modelo: 'Dell Latitude 5420', patrimonio: 'STCP12345', status: 'disponivel', especificacoes: 'i5 10th, 8GB RAM, 256GB SSD' },
+                                { id: 2, tipo: 'notebook', modelo: 'Dell Latitude 5420', patrimonio: 'STCP12346', status: 'disponivel', especificacoes: 'i5 10th, 8GB RAM, 256GB SSD' },
+                                { id: 3, tipo: 'notebook', modelo: 'HP EliteBook 840', patrimonio: 'STCP12347', status: 'indisponivel', especificacoes: 'i7 11th, 16GB RAM, 512GB SSD' },
+                                { id: 4, tipo: 'desktop', modelo: 'Dell OptiPlex 3080', patrimonio: 'STCP12348', status: 'disponivel', especificacoes: 'i5 10th, 8GB RAM, 1TB HDD' },
+                                { id: 5, tipo: 'desktop', modelo: 'Dell OptiPlex 3080', patrimonio: 'STCP12349', status: 'indisponivel', especificacoes: 'i5 10th, 8GB RAM, 1TB HDD' },
+                                { id: 6, tipo: 'monitor', modelo: 'Dell P2421D', patrimonio: 'STCP12350', status: 'disponivel', especificacoes: '24" Full HD' },
+                                { id: 7, tipo: 'monitor', modelo: 'Dell P2720Q', patrimonio: 'STCP12351', status: 'indisponivel', especificacoes: '27" 4K' },
+                                { id: 8, tipo: 'impressora', modelo: 'HP LaserJet MFP M428fdw', patrimonio: 'STCP12352', status: 'indisponivel', especificacoes: 'Multifuncional Laser' }
+                            ];
+                            
+                            this.usuarios = [
+                                { id: 1, nome: 'João Silva', departamento: 'Engenharia', email: 'joao.silva@stcp.com.br' },
+                                { id: 2, nome: 'Maria Oliveira', departamento: 'Projetos', email: 'maria.oliveira@stcp.com.br' },
+                                { id: 3, nome: 'Carlos Souza', departamento: 'Administrativo', email: 'carlos.souza@stcp.com.br' },
+                                { id: 4, nome: 'Ana Costa', departamento: 'Financeiro', email: 'ana.costa@stcp.com.br' }
+                            ];
+                            
+                            this.softwares = [
+                                { id: 1, nome: 'Microsoft Office 365', chave: 'XXXXX-XXXXX-XXXXX-XXXXX', quantidade: 20, emUso: 15 },
+                                { id: 2, nome: 'AutoCAD 2023', chave: 'YYYYY-YYYYY-YYYYY-YYYYY', quantidade: 5, emUso: 3 },
+                                { id: 3, nome: 'Adobe Creative Cloud', chave: 'ZZZZZ-ZZZZZ-ZZZZZ-ZZZZZ', quantidade: 10, emUso: 8 }
+                            ];
+                            
+                            this.atribuicoes = [
+                                { id: 1, usuarioId: 1, dispositivoId: 3, data: '2023-05-15', observacoes: 'Atribuição inicial' },
+                                { id: 2, usuarioId: 2, dispositivoId: 5, data: '2023-05-10', observacoes: 'Substituição de equipamento' },
+                                { id: 3, usuarioId: 3, dispositivoId: 7, data: '2023-05-05', observacoes: 'Novo colaborador' }
+                            ];
+                            
+                            this.totaisDispositivos = this.calcularTotaisIniciais();
+                        },
+
+                        atualizarTotaisDispositivos() {
+                            this.totaisDispositivos = this.calcularTotaisIniciais();
+                            this.salvarDados();
+                        },
+
                         showToast(message, type = 'success') {
                             const toast = { message, type };
                             this.toasts.push(toast);
@@ -1508,9 +1549,9 @@
                                 this.toasts = this.toasts.filter(t => t !== toast);
                             }, 3000);
                         },
+
                         fazerLogin() {
                             this.carregando = true;
-                            // Simulação de login
                             setTimeout(() => {
                                 if (this.login.usuario === 'admin' && this.login.senha === 'admin123') {
                                     this.usuarioLogado = true;
@@ -1522,11 +1563,13 @@
                                 this.carregando = false;
                             }, 1000);
                         },
+
                         entrarComoVisitante() {
                             this.usuarioLogado = true;
                             this.isAdmin = false;
                             this.showToast('Entrando como visitante - acesso limitado');
                         },
+
                         sair() {
                             this.usuarioLogado = false;
                             this.login.usuario = '';
@@ -1534,20 +1577,25 @@
                             this.mensagemErro = '';
                             this.showToast('Você saiu do sistema');
                         },
+
                         formatarData(data) {
                             if (!data) return '';
                             const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
                             return new Date(data).toLocaleDateString('pt-BR', options);
                         },
+
                         formatarTipo(tipo) {
                             return this.$options.filters.formatarTipo(tipo);
                         },
+
                         dispositivosPorTipo(tipo) {
                             return this.dispositivos.filter(d => d.tipo === tipo);
                         },
+
                         toggleEstoque(tipo) {
                             // Implementação do toggle
                         },
+
                         atribuirDispositivo() {
                             if (!this.atribuicao.usuarioId || !this.atribuicao.dispositivoId) {
                                 this.showToast('Selecione um usuário e um dispositivo', 'error');
@@ -1556,7 +1604,6 @@
 
                             const dispositivo = this.dispositivos.find(d => d.id === this.atribuicao.dispositivoId);
                             if (dispositivo && dispositivo.status === 'disponivel') {
-                                // Simular atribuição
                                 dispositivo.status = 'indisponivel';
 
                                 const novaAtribuicao = {
@@ -1568,20 +1615,15 @@
                                 };
 
                                 this.atribuicoes.push(novaAtribuicao);
-
-                                // Atualizar totais
-                                const tipoDispositivo = this.totaisDispositivos.find(t => t.tipo.toLowerCase().includes(dispositivo.tipo));
-                                if (tipoDispositivo) {
-                                    tipoDispositivo.disponiveis--;
-                                    tipoDispositivo.indisponiveis++;
-                                }
-
+                                this.atualizarTotaisDispositivos();
                                 this.showToast('Dispositivo atribuído com sucesso!');
                                 this.atribuicao = { usuarioId: '', dispositivoId: '', observacoes: '' };
+                                this.salvarDados();
                             } else {
                                 this.showToast('Dispositivo não está disponível', 'error');
                             }
                         },
+
                         removerAtribuicao(id) {
                             const index = this.atribuicoes.findIndex(a => a.id === id);
                             if (index !== -1) {
@@ -1590,48 +1632,33 @@
 
                                 if (dispositivo) {
                                     dispositivo.status = 'disponivel';
-
-                                    // Atualizar totais
-                                    const tipoDispositivo = this.totaisDispositivos.find(t => t.tipo.toLowerCase().includes(dispositivo.tipo));
-                                    if (tipoDispositivo) {
-                                        tipoDispositivo.disponiveis++;
-                                        tipoDispositivo.indisponiveis--;
-                                    }
                                 }
 
                                 this.atribuicoes.splice(index, 1);
+                                this.atualizarTotaisDispositivos();
                                 this.showToast('Atribuição removida com sucesso!');
+                                this.salvarDados();
                             }
                         },
+
                         confirmarExclusaoDispositivo(dispositivo) {
                             if (confirm(`Tem certeza que deseja excluir o dispositivo ${dispositivo.modelo} (Patrimônio: ${dispositivo.patrimonio})?`)) {
-                                // Verificar se o dispositivo está atribuído a alguém
                                 const atribuicaoIndex = this.atribuicoes.findIndex(a => a.dispositivoId === dispositivo.id);
                                 
                                 if (atribuicaoIndex !== -1) {
-                                    // Se estiver atribuído, remover a atribuição primeiro
                                     this.atribuicoes.splice(atribuicaoIndex, 1);
                                 }
                                 
-                                // Remover o dispositivo
                                 const index = this.dispositivos.findIndex(d => d.id === dispositivo.id);
                                 if (index !== -1) {
-                                    // Atualizar totais
-                                    const tipoDispositivo = this.totaisDispositivos.find(t => t.tipo.toLowerCase().includes(dispositivo.tipo));
-                                    if (tipoDispositivo) {
-                                        if (dispositivo.status === 'disponivel') {
-                                            tipoDispositivo.disponiveis--;
-                                        } else {
-                                            tipoDispositivo.indisponiveis--;
-                                        }
-                                        tipoDispositivo.total--;
-                                    }
-                                    
                                     this.dispositivos.splice(index, 1);
+                                    this.atualizarTotaisDispositivos();
                                     this.showToast('Dispositivo removido com sucesso!');
+                                    this.salvarDados();
                                 }
                             }
                         },
+
                         filtrarUsuarios() {
                             if (!this.filtroUsuario) {
                                 this.usuariosFiltrados = [...this.usuarios];
@@ -1645,20 +1672,22 @@
                                 u.email.toLowerCase().includes(termo)
                             );
                         },
+
                         contarDispositivosUsuario(usuarioId) {
                             return this.atribuicoes.filter(a => a.usuarioId === usuarioId).length;
                         },
+
                         abrirModalNovoUsuario() {
                             this.novoUsuario = { nome: '', departamento: '', email: '' };
                             $('#modalNovoUsuario').modal('show');
                         },
+
                         cadastrarUsuario() {
                             if (!this.novoUsuario.nome || !this.novoUsuario.departamento || !this.novoUsuario.email) {
                                 this.showToast('Preencha todos os campos obrigatórios', 'error');
                                 return;
                             }
 
-                            // Validar formato de email simples
                             if (!this.novoUsuario.email.includes('@') || !this.novoUsuario.email.includes('.')) {
                                 this.showToast('Informe um email válido', 'error');
                                 return;
@@ -1676,23 +1705,27 @@
                             this.showToast('Usuário cadastrado com sucesso!');
                             $('#modalNovoUsuario').modal('hide');
                             this.filtrarUsuarios();
+                            this.salvarDados();
                         },
+
                         editarUsuario(usuario) {
                             this.novoUsuario = { ...usuario };
                             $('#modalNovoUsuario').modal('show');
                         },
+
                         confirmarExclusaoUsuario(usuario) {
                             if (confirm(`Tem certeza que deseja excluir o usuário ${usuario.nome}?`)) {
                                 const index = this.usuarios.findIndex(u => u.id === usuario.id);
                                 if (index !== -1) {
-                                    // Remover também todas as atribuições deste usuário
                                     this.atribuicoes = this.atribuicoes.filter(a => a.usuarioId !== usuario.id);
                                     this.usuarios.splice(index, 1);
                                     this.showToast('Usuário removido com sucesso!');
                                     this.filtrarUsuarios();
+                                    this.salvarDados();
                                 }
                             }
                         },
+
                         adicionarSoftware() {
                             if (!this.novoSoftware.nome || !this.novoSoftware.chave || !this.novoSoftware.quantidade) {
                                 this.showToast('Preencha todos os campos do software', 'error');
@@ -1710,37 +1743,50 @@
                             this.softwares.push(novoSoftware);
                             this.showToast('Software adicionado com sucesso!');
                             this.novoSoftware = { nome: '', chave: '', quantidade: 1 };
+                            this.salvarDados();
                         },
+
                         atribuirSoftware(software) {
-                            // Implementação da atribuição
                             this.showToast(`Atribuindo licença de ${software.nome}`, 'error');
                         },
+
                         removerSoftware(id) {
                             if (confirm('Tem certeza que deseja remover este software?')) {
                                 const index = this.softwares.findIndex(s => s.id === id);
                                 if (index !== -1) {
                                     this.softwares.splice(index, 1);
                                     this.showToast('Software removido com sucesso!');
+                                    this.salvarDados();
                                 }
                             }
                         },
+
                         gerarRelatorioEstoque() {
                             this.showToast('Gerando relatório de estoque...', 'error');
                         },
+
                         gerarRelatorioUsuarios() {
                             this.showToast('Gerando relatório por usuário...', 'error');
                         },
+
                         gerarRelatorioHistorico() {
                             this.showToast('Gerando relatório histórico...', 'error');
                         },
+
                         cadastrarDispositivo() {
                             if (!this.novoDispositivo.tipo || !this.novoDispositivo.modelo || !this.novoDispositivo.patrimonio) {
                                 this.showToast('Preencha todos os campos obrigatórios', 'error');
                                 return;
                             }
 
+                            // Verificar se o patrimônio já existe
+                            if (this.dispositivos.some(d => d.patrimonio === this.novoDispositivo.patrimonio)) {
+                                this.showToast('Já existe um dispositivo com este número de patrimônio', 'error');
+                                return;
+                            }
+
                             const novoDispositivo = {
-                                id: this.dispositivos.length + 1,
+                                id: this.dispositivos.length > 0 ? Math.max(...this.dispositivos.map(d => d.id)) + 1 : 1,
                                 tipo: this.novoDispositivo.tipo,
                                 modelo: this.novoDispositivo.modelo,
                                 patrimonio: this.novoDispositivo.patrimonio,
@@ -1749,45 +1795,46 @@
                             };
 
                             this.dispositivos.push(novoDispositivo);
-
-                            // Atualizar totais
-                            const tipoDispositivo = this.totaisDispositivos.find(t => t.tipo.toLowerCase().includes(this.novoDispositivo.tipo));
-                            if (tipoDispositivo) {
-                                tipoDispositivo.disponiveis++;
-                                tipoDispositivo.total++;
-                            } else {
-                                // Se não existir, criar um novo tipo
-                                this.totaisDispositivos.push({
-                                    tipo: this.formatarTipo(this.novoDispositivo.tipo) + 's',
-                                    icone: this.iconesDispositivos[this.novoDispositivo.tipo] || 'fas fa-box',
-                                    disponiveis: 1,
-                                    indisponiveis: 0,
-                                    total: 1
-                                });
-                            }
-
+                            this.atualizarTotaisDispositivos();
                             this.showToast('Dispositivo cadastrado com sucesso!');
                             this.novoDispositivo = { tipo: '', modelo: '', patrimonio: '', especificacoes: '' };
+                            this.salvarDados();
                         },
+
                         cadastrarDispositivosEmLote() {
                             if (!this.loteDispositivos.tipo || !this.loteDispositivos.modelo || !this.loteDispositivos.patrimonios) {
                                 this.showToast('Preencha todos os campos obrigatórios', 'error');
                                 return;
                             }
 
-                            const patrimonios = this.loteDispositivos.patrimonios.split('\n').filter(p => p.trim() !== '');
+                            const patrimonios = this.loteDispositivos.patrimonios.split('\n')
+                                .map(p => p.trim())
+                                .filter(p => p !== '');
+
                             if (patrimonios.length === 0) {
                                 this.showToast('Insira pelo menos um número de patrimônio', 'error');
                                 return;
                             }
 
+                            // Verificar se algum patrimônio já existe
+                            const patrimoniosExistentes = patrimonios.filter(p => 
+                                this.dispositivos.some(d => d.patrimonio === p)
+                            );
+
+                            if (patrimoniosExistentes.length > 0) {
+                                this.showToast(`Os seguintes patrimônios já existem: ${patrimoniosExistentes.join(', ')}`, 'error');
+                                return;
+                            }
+
+                            let ultimoId = this.dispositivos.length > 0 ? Math.max(...this.dispositivos.map(d => d.id)) : 0;
                             let cadastrados = 0;
+
                             patrimonios.forEach(patrimonio => {
                                 const novoDispositivo = {
-                                    id: this.dispositivos.length + 1 + cadastrados,
+                                    id: ++ultimoId,
                                     tipo: this.loteDispositivos.tipo,
                                     modelo: this.loteDispositivos.modelo,
-                                    patrimonio: patrimonio.trim(),
+                                    patrimonio: patrimonio,
                                     status: 'disponivel',
                                     especificacoes: 'Cadastrado em lote'
                                 };
@@ -1796,30 +1843,18 @@
                                 cadastrados++;
                             });
 
-                            // Atualizar totais
-                            const tipoDispositivo = this.totaisDispositivos.find(t => t.tipo.toLowerCase().includes(this.loteDispositivos.tipo));
-                            if (tipoDispositivo) {
-                                tipoDispositivo.disponiveis += cadastrados;
-                                tipoDispositivo.total += cadastrados;
-                            } else {
-                                // Se não existir, criar um novo tipo
-                                this.totaisDispositivos.push({
-                                    tipo: this.formatarTipo(this.loteDispositivos.tipo) + 's',
-                                    icone: this.iconesDispositivos[this.loteDispositivos.tipo] || 'fas fa-box',
-                                    disponiveis: cadastrados,
-                                    indisponiveis: 0,
-                                    total: cadastrados
-                                });
-                            }
-
+                            this.atualizarTotaisDispositivos();
                             this.showToast(`${cadastrados} dispositivos cadastrados com sucesso!`);
                             this.loteDispositivos = { tipo: '', modelo: '', patrimonios: '' };
+                            this.salvarDados();
                         },
+
                         abrirModalAtribuicaoRapida() {
                             this.atribuicaoRapida = { usuarioId: '', tipoDispositivo: '', dispositivoId: '' };
                             this.dispositivosFiltrados = this.dispositivosDisponiveis;
                             $('#modalAtribuicaoRapida').modal('show');
                         },
+
                         filtrarDisponiveisPorTipo() {
                             if (!this.atribuicaoRapida.tipoDispositivo) {
                                 this.dispositivosFiltrados = this.dispositivosDisponiveis;
@@ -1830,6 +1865,7 @@
                             }
                             this.atribuicaoRapida.dispositivoId = '';
                         },
+
                         confirmarAtribuicaoRapida() {
                             if (!this.atribuicaoRapida.usuarioId || !this.atribuicaoRapida.dispositivoId) {
                                 this.showToast('Selecione um usuário e um dispositivo', 'error');
@@ -1849,30 +1885,25 @@
                                 };
 
                                 this.atribuicoes.push(novaAtribuicao);
-
-                                // Atualizar totais
-                                const tipoDispositivo = this.totaisDispositivos.find(t => t.tipo.toLowerCase().includes(dispositivo.tipo));
-                                if (tipoDispositivo) {
-                                    tipoDispositivo.disponiveis--;
-                                    tipoDispositivo.indisponiveis++;
-                                }
-
+                                this.atualizarTotaisDispositivos();
                                 this.showToast('Dispositivo atribuído com sucesso!');
                                 $('#modalAtribuicaoRapida').modal('hide');
+                                this.salvarDados();
                             } else {
                                 this.showToast('Dispositivo não está disponível', 'error');
                             }
                         },
+
                         abrirModalAtribuicao(dispositivo) {
                             this.atribuicao.dispositivoId = dispositivo.id;
                             this.atribuicao.usuarioId = '';
                             this.atribuicao.observacoes = '';
-                            // Scroll para a seção de atribuição
                             this.abaAtiva = 'atribuicao';
                             setTimeout(() => {
                                 document.querySelector('#app').scrollIntoView({ behavior: 'smooth' });
                             }, 100);
                         },
+
                         verDetalhesAtribuicao(dispositivo) {
                             const atribuicao = this.atribuicoes.find(a => a.dispositivoId === dispositivo.id);
                             if (atribuicao) {
@@ -1884,7 +1915,7 @@
                         }
                     },
                     mounted() {
-                        // Inicializar usuários filtrados
+                        this.carregarDados();
                         this.usuariosFiltrados = [...this.usuarios];
                     }
                 });
