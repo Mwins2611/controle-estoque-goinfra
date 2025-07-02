@@ -1025,6 +1025,10 @@
                                                                 @click="verDetalhesAtribuicao(dispositivo)">
                                                                 <i class="fas fa-info-circle"></i> Detalhes
                                                             </button>
+                                                            <button class="btn btn-sm btn-danger ml-1"
+                                                                @click="confirmarExclusaoDispositivo(dispositivo)">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -1291,7 +1295,8 @@
                             </div>
                             <div class="form-group">
                                 <label>Tipo de Dispositivo</label>
-                                <select class="form-control" v-model="atribuicaoRapida.tipoDispositivo" @change="filtrarDisponiveisPorTipo">
+                                <select class="form-control" v-model="atribuicaoRapida.tipoDispositivo"
+                                    @change="filtrarDisponiveisPorTipo">
                                     <option value="">Todos os tipos</option>
                                     <option v-for="tipo in tiposDispositivos" :value="tipo" :key="tipo">
                                         {{ tipo | formatarTipo }}
@@ -1302,7 +1307,8 @@
                                 <label>Dispositivo</label>
                                 <select class="form-control" v-model="atribuicaoRapida.dispositivoId">
                                     <option value="">Selecione um dispositivo</option>
-                                    <option v-for="dispositivo in dispositivosFiltrados" :value="dispositivo.id" :key="dispositivo.id">
+                                    <option v-for="dispositivo in dispositivosFiltrados" :value="dispositivo.id"
+                                        :key="dispositivo.id">
                                         {{ dispositivo.modelo }} (Patrimônio: {{ dispositivo.patrimonio }})
                                     </option>
                                 </select>
@@ -1597,6 +1603,35 @@
                                 this.showToast('Atribuição removida com sucesso!');
                             }
                         },
+                        confirmarExclusaoDispositivo(dispositivo) {
+                            if (confirm(`Tem certeza que deseja excluir o dispositivo ${dispositivo.modelo} (Patrimônio: ${dispositivo.patrimonio})?`)) {
+                                // Verificar se o dispositivo está atribuído a alguém
+                                const atribuicaoIndex = this.atribuicoes.findIndex(a => a.dispositivoId === dispositivo.id);
+                                
+                                if (atribuicaoIndex !== -1) {
+                                    // Se estiver atribuído, remover a atribuição primeiro
+                                    this.atribuicoes.splice(atribuicaoIndex, 1);
+                                }
+                                
+                                // Remover o dispositivo
+                                const index = this.dispositivos.findIndex(d => d.id === dispositivo.id);
+                                if (index !== -1) {
+                                    // Atualizar totais
+                                    const tipoDispositivo = this.totaisDispositivos.find(t => t.tipo.toLowerCase().includes(dispositivo.tipo));
+                                    if (tipoDispositivo) {
+                                        if (dispositivo.status === 'disponivel') {
+                                            tipoDispositivo.disponiveis--;
+                                        } else {
+                                            tipoDispositivo.indisponiveis--;
+                                        }
+                                        tipoDispositivo.total--;
+                                    }
+                                    
+                                    this.dispositivos.splice(index, 1);
+                                    this.showToast('Dispositivo removido com sucesso!');
+                                }
+                            }
+                        },
                         filtrarUsuarios() {
                             if (!this.filtroUsuario) {
                                 this.usuariosFiltrados = [...this.usuarios];
@@ -1630,7 +1665,7 @@
                             }
 
                             const novoId = this.usuarios.length > 0 ? Math.max(...this.usuarios.map(u => u.id)) + 1 : 1;
-                            
+
                             this.usuarios.push({
                                 id: novoId,
                                 nome: this.novoUsuario.nome,
